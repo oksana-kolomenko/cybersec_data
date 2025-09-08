@@ -119,10 +119,10 @@ feature_extractor_gte_small = create_gen_feature_extractor("thenlper/gte-small")
 feature_extractor_gte_base = create_gen_feature_extractor("thenlper/gte-base")
 
 # gte-base-en-v1.5
-# feature_extractor_gte_base_en_v1_5 = create_gte_feature_extractor("Alibaba-NLP/gte-base-en-v1.5")
+feature_extractor_gte_base_en_v1_5 = create_gte_feature_extractor("Alibaba-NLP/gte-base-en-v1.5")
 
 # gte-large
-# feature_extractor_gte_large = create_gen_feature_extractor("thenlper/gte-large")
+feature_extractor_gte_large = create_gen_feature_extractor("thenlper/gte-large")
 
 # stella_en_400M_v5 (SotA)
 # feature_extractor_stella_en_400M_v5 = create_gen_feature_extractor("dunzhang/stella_en_400M_v5")
