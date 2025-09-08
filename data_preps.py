@@ -8,26 +8,28 @@ from values import DatasetName, Textstyle
 
 
 # Load features
-def load_features(file_path, delimiter=','):
+def load_features(file_path, delimiter=',', n_samples=None):
     data = pd.read_csv(file_path, delimiter=delimiter)
+    if n_samples:
+        data = data.head(n_samples)  # Take only the first n_samples rows
     print(f"features: {data}")
     return data
 
-
-def load_labels(file_path, delimiter=','):
-    # Load the labels
+def load_labels(file_path, delimiter=',', n_samples=None):
     data = pd.read_csv(file_path, delimiter=delimiter)
-    labels = data.values.ravel()  # Flatten in case it's a single column DataFrame
+    labels = data.values.ravel()
+    if n_samples:
+        labels = labels[:n_samples]  # Take only the first n_samples elements
     return labels
 
-
-# Load features as text summaries (create if doesn't exist)
-def load_summaries(file_name):
+def load_summaries(file_name, n_samples=None):
     if not os.path.exists(file_name):
         print("File not found")
         return []
     with open(file_name, "r") as file:
         summaries_list = [line.strip() for line in file.readlines()]
+    if n_samples:
+        summaries_list = summaries_list[:n_samples]
     return summaries_list
 
 

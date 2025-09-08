@@ -1,0 +1,2 @@
+Dataset,ML Method,Embedding Method,Concatenation,Best Parameters,PCA n_components,AUC,AP,Sensitivity,Specificity,Precision,F1,Balanced Accuracy
+cybersecurity,HistGradientBoostingClassifier,all_miniLM_L6_v2,conc1,"{'classifier__min_samples_leaf': 20, 'transformer__text__embedding_aggregator__method': 'embedding_mean_without_cls_and_sep'}",none,0.53,0.5503882667040562,0.5,0.5,0.5,0.5,0.5

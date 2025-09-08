@@ -1011,25 +1011,7 @@ def concat_hgbc_txt_emb(dataset_name, emb_method,
     )
 
     # === Evaluation ===
-    if dataset_name == DatasetName.POSTTRAUMA.value:
-        for train_index, test_index in skf.split(X_tabular, y):
-            X_train, X_test = X_tabular.iloc[train_index], X_tabular.iloc[test_index]
-            y_train, y_test = y[train_index], y[test_index]
-
-            print(f"Length of X_tab_train: {len(X_train)}")
-            print(f"Length of y_train: {len(y_train)}")
-
-            assert len(X_train) == len(y_train), "Mismatch in training data sizes"
-
-            search.fit(X_train, y_train)
-
-            y_test_pred = search.predict(X_test)
-            y_test_pred_proba = search.predict_proba(X_test)[:, 1]
-
-            metrics_per_fold.append(
-                calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
-
-    elif dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
+    if dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
         X_train, X_test, y_train, y_test = train_test_split(X_tabular, y, test_size=0.2, random_state=42)
 
         print(f"Train size: {len(X_train)}, Test size: {len(X_test)}")
