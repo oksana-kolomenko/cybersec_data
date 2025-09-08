@@ -38,23 +38,6 @@ def write_summary(file_name, summaries):
     print(f"All patient summaries written")
 
 
-def create_summary(dataset_name, table_file, summaries_file, text_style):
-    if dataset_name == DatasetName.POSTTRAUMA.value:
-        all_patient_summaries = create_patient_summaries(table_file, text_style)
-        write_summary(file_name=summaries_file, summaries=all_patient_summaries)
-
-    elif dataset_name == DatasetName.CYBERSECURITY.value:
-        all_cybersecurity_summaries = create_general_summaries(table_file, text_style)
-        write_summary(file_name=summaries_file, summaries=all_cybersecurity_summaries)
-
-    elif dataset_name == DatasetName.LUNG_DISEASE.value:
-        all_ld_summaries = create_general_summaries(table_file, text_style)
-        write_summary(file_name=summaries_file, summaries=all_ld_summaries)
-
-    else:
-        raise ValueError(f"Unknown dataset name: {dataset_name}")
-
-
 def create_general_summaries(tab_data): #, text_style):
     df_tab_data = pd.read_csv(tab_data)
     summaries = []
