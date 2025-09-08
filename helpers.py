@@ -719,6 +719,7 @@ def concat_lr_txt_emb(dataset_name, emb_method,
     n_splits = config.splits
     n_components = config.pca
     n_repeats = config.n_repeats
+    train_metrics = ""
 
     ml_method = "Logistic Regression"
     emb_method = emb_method
@@ -785,20 +786,7 @@ def concat_lr_txt_emb(dataset_name, emb_method,
         cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats)
     )
     # === Evaluation ===
-    if dataset_name == DatasetName.POSTTRAUMA.value:
-        for train_index, test_index in skf.split(X_tabular, y):
-            X_train, X_test = X_tabular.iloc[train_index], X_tabular.iloc[test_index]
-            y_train, y_test = y[train_index], y[test_index]
-
-            search.fit(X_train, y_train)
-
-            y_test_pred = search.predict(X_test)
-            y_test_pred_proba = search.predict_proba(X_test)[:, 1]
-
-            metrics_per_fold.append(
-                calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
-
-    elif dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
+    if dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
         X_train, X_test, y_train, y_test = train_test_split(X_tabular, y, test_size=0.2, random_state=42)
 
         print(f"Train size: {len(X_train)}, Test size: {len(X_test)}")
@@ -815,16 +803,10 @@ def concat_lr_txt_emb(dataset_name, emb_method,
         metrics_per_fold.append(
             calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
 
-    search.fit(X_tabular, y)
+        y_train_pred = search.predict(X_train)
+        y_train_pred_proba = search.predict_proba(X_train)[:, 1]
 
-    y_train_pred = search.predict(X_tabular)
-    y_train_pred_proba = search.predict_proba(X_tabular)[:, 1]
-
-    print(f"Shape X_tabular: {X_tabular.shape}")
-    print(f"y shape: {y.shape}")  # Should be (82,)
-    print(f"y_train_pred shape: {y_train_pred.shape}")  # Should also be (82,)
-
-    train_metrics = calc_metrics(y=y, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
+        train_metrics = calc_metrics(y=y_train, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
 
     finish_time = time.time()
     readable_time = time.strftime("%H:%M:%S", time.localtime(finish_time))
@@ -966,6 +948,7 @@ def concat_hgbc_txt_emb(dataset_name, emb_method,
     else:
         y = y.to_numpy()
 
+    train_metrics = ""
     ml_method = "HistGradientBoostingClassifier"
     emb_method = emb_method
     metrics_per_fold = []
@@ -1063,20 +1046,10 @@ def concat_hgbc_txt_emb(dataset_name, emb_method,
         metrics_per_fold.append(
             calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
 
-    print(f"X_tabular len: {len(X_tabular)}")
-    print(f"Text_features len: {len(text_features)}")  # muss 82 sein
-    print(f"y len: {len(y)}")
-    assert len(X_tabular) == len(y), "Mismatch in training data sizes"
+        y_train_pred = search.predict(X_train)
+        y_train_pred_proba = search.predict_proba(X_train)[:, 1]
 
-    search.fit(X_tabular, y)
-    y_train_pred = search.predict(X_tabular)
-    y_train_pred_proba = search.predict_proba(X_tabular)[:, 1]
-
-    print(f"X_tabular shape {X_tabular.shape}")
-    print(f"y shape: {y.shape}")  # Should be (82,)
-    print(f"y_train_pred shape: {y_train_pred.shape}")  # Should also be (82,)
-
-    train_metrics = calc_metrics(y=y, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
+        train_metrics = calc_metrics(y=y_train, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
 
     best_params = f"{search.best_params_}"
     print(f"Best hyperparameters: {best_params}")
