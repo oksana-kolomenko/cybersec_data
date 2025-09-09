@@ -5,7 +5,7 @@ from data_preps import load_features, load_labels, load_summaries
 from helpers import concat_lr_rte, concat_hgbc_rte, concat_lr_txt_emb, concat_hgbc_txt_emb, hgbc_txt_emb, lr_txt_emb
 from models import (feature_extractor_gist_embedding_v0, feature_extractor_gte_small,
                     feature_extractor_gist_large_embedding_v0, feature_extractor_gte_base_en_v1_5,
-                    feature_extractor_gte_large)
+                    feature_extractor_gte_large, feature_extractor_gte_base)
 #, feature_extractor_gte_base, feature_extractor_bge_base_en_v1_5, \
  #   feature_extractor_gte_base_en_v1_5, feature_extractor_gte_large)
 
@@ -54,11 +54,11 @@ def run_txt_emb():
     # === CYBERSECURITY ===
 
     dataset = DatasetName.CYBERSECURITY.value
-    y = load_labels("data/y_cybersecurity_intrusion_data.csv")
+    y = load_labels("data/y_cybersecurity_intrusion_data.csv") #, n_samples=51)
     X = load_features("data/X_cybersecurity_intrusion_data.csv")
-    X_metr = load_features("data/X_cybersecurity_metrics.csv")
-    all_summaries = load_summaries("data/_cybersecurity_summaries.txt")
-    nom_summaries = load_summaries("data/_cybersecurity_nom_summaries.txt")
+    X_metr = load_features("data/X_cybersecurity_metrics.csv") #, n_samples=51)
+    all_summaries = load_summaries("data/_cybersecurity_summaries.txt") #, n_samples=51)
+    nom_summaries = load_summaries("data/_cybersecurity_nom_summaries.txt") #, n_samples=51)
 
     nominal_features = [
         'encryption_used',
@@ -69,7 +69,6 @@ def run_txt_emb():
 
     methods = {
         # all summaries, all features
-        """
         # all summaries, all features
         "conc1": {"X": X,
                   "summaries": all_summaries,
@@ -81,7 +80,6 @@ def run_txt_emb():
                       "conc": "conc1",
                       "pca": True,
                       "pca_str": "pca_"},
-        """
         # all summaries, metr features
         "pca_conc2": {"X": X_metr,
                       "summaries": all_summaries,
@@ -144,8 +142,8 @@ def run_txt_emb():
         #"GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
 
         # GTE Models
-        #"GTE-Base": feature_extractor_gte_base,
-        "GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
+        "GTE-Base": feature_extractor_gte_base,
+        #"GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
         #"GTE-Large": feature_extractor_gte_large,
         #"GTE-Small": feature_extractor_gte_small,
 

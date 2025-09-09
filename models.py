@@ -116,7 +116,7 @@ feature_extractor_gist_large_embedding_v0 = create_gen_feature_extractor("avsola
 feature_extractor_gte_small = create_gen_feature_extractor("thenlper/gte-small")
 
 # gte-base
-#feature_extractor_gte_base = create_gen_feature_extractor("thenlper/gte-base")
+feature_extractor_gte_base = create_gen_feature_extractor("thenlper/gte-base")
 
 # gte-base-en-v1.5
 feature_extractor_gte_base_en_v1_5 = create_gte_feature_extractor("Alibaba-NLP/gte-base-en-v1.5")
