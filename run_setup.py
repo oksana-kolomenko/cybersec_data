@@ -69,13 +69,6 @@ def run_txt_emb():
 
     methods = {
         # all summaries, all features
-
-        "conc1": {"X": X,
-                  "summaries": all_summaries,
-                  "conc": "conc1",
-                  "pca": False,
-                  "pca_str": ""},
-
         """
             "pca_conc1": {"X": X,
                           "summaries": all_summaries,
@@ -100,14 +93,19 @@ def run_txt_emb():
                   "conc": "conc3",
                   "pca": False,
                   "pca_str": ""}                       
-            """
-
-        # all summaries, metr features
+                # all summaries, metr features
         "conc2": {"X": X_metr,
                   "summaries": all_summaries,
                   "conc": "conc2",
                   "pca": False,
                   "pca_str": ""},
+            """
+        "conc1": {"X": X,
+                  "summaries": all_summaries,
+                  "conc": "conc1",
+                  "pca": False,
+                  "pca_str": ""},
+
     }
 
     text_feature = 'text'
@@ -130,7 +128,7 @@ def run_txt_emb():
 
         # E5 Models
         #"E5-Small-V2": feature_extractor_e5_small_v2,
-        "E5-Base-V2": feature_extractor_e5_base_v2,
+        #"E5-Base-V2": feature_extractor_e5_base_v2,
         #"E5-Large-V2": feature_extractor_e5_large_v2,
 
         # BGE Models (done)
@@ -140,7 +138,7 @@ def run_txt_emb():
 
         # GIST Models
         #"GIST-Small-Embedding-v0": feature_extractor_gist_small_embedding_v0,
-        #"GIST-Embedding-v0": feature_extractor_gist_embedding_v0,
+        "GIST-Embedding-v0": feature_extractor_gist_embedding_v0,
         #"GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
 
         # GTE Models
