@@ -35,13 +35,12 @@ def run_txt_emb():
 
     # === LUNGDISEASE ===
 
-    """
     dataset = DatasetName.LUNG_DISEASE.value
-    y = load_labels("y_lung_disease_data.csv")
-    X = load_features("X_lung_disease_data.csv")
-    X_metr = load_features("X_lungdisease_metrics.csv")
-    all_summaries = load_summaries("_lung_disease_summaries.txt")
-    nom_summaries = load_summaries("lungdisease_nom_summaries.txt")
+    y = load_labels("data/y_lung_disease_data.csv", n_samples=100)
+    X = load_features("data/X_lung_disease_data.csv", n_samples=100)
+    X_metr = load_features("data/X_lungdisease_metrics.csv", n_samples=100)
+    all_summaries = load_summaries("data/_lung_disease_summaries.txt", n_samples=100)
+    nom_summaries = load_summaries("data/lungdisease_nom_summaries.txt", n_samples=100)
 
     nominal_features = [
         'Gender',
@@ -49,10 +48,11 @@ def run_txt_emb():
         'Disease Type',
         'Treatment Type'
     ]
-    """
+
 
     # === CYBERSECURITY ===
 
+    """
     dataset = DatasetName.CYBERSECURITY.value
     y = load_labels("data/y_cybersecurity_intrusion_data.csv") #, n_samples=51)
     X = load_features("data/X_cybersecurity_intrusion_data.csv")
@@ -65,7 +65,7 @@ def run_txt_emb():
         'browser_type',
         'protocol_type',
         'unusual_time_access'
-    ]
+    ]"""
 
     methods = {
         # all summaries, all features
@@ -112,7 +112,7 @@ def run_txt_emb():
 
     feature_extractors = {
         # All MiniLM L6 v2
-        #"all_miniLM_L6_v2": feature_extractor_all_minilm_l6_v2,
+        "all_miniLM_L6_v2": feature_extractor_all_minilm_l6_v2,
 
         # Stella en 400m v5
         #"Stella-EN-400M-v5": feature_extractor_stella_en_400M_v5,
@@ -142,7 +142,7 @@ def run_txt_emb():
         #"GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
 
         # GTE Models
-        "GTE-Base": feature_extractor_gte_base,
+        #"GTE-Base": feature_extractor_gte_base,
         #"GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
         #"GTE-Large": feature_extractor_gte_large,
         #"GTE-Small": feature_extractor_gte_small,
