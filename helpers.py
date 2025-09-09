@@ -783,7 +783,8 @@ def concat_lr_txt_emb(dataset_name, emb_method,
             ]
         },
         scoring="neg_log_loss",
-        cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats)
+        cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats),
+        n_jobs=-1
     )
     # === Evaluation ===
     if dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
@@ -1003,7 +1004,8 @@ def concat_hgbc_txt_emb(dataset_name, emb_method,
             ]
         },
         scoring="neg_log_loss",
-        cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats)
+        cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats),
+        n_jobs=-1
     )
 
     # === Evaluation ===
