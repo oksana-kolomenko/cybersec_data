@@ -36,24 +36,23 @@ def run_txt_emb():
 
     # === LUNGDISEASE ===
 
-    """
     dataset = DatasetName.LUNG_DISEASE.value
-    y = load_labels("data/y_lung_disease_data.csv", n_samples=100)
-    X = load_features("data/X_lung_disease_data.csv", n_samples=100)
-    X_metr = load_features("data/X_lungdisease_metrics.csv", n_samples=100)
-    all_summaries = load_summaries("data/_lung_disease_summaries.txt", n_samples=100)
-    nom_summaries = load_summaries("data/lungdisease_nom_summaries.txt", n_samples=100)
+    y = load_labels("data/y_lung_disease_data.csv")#, n_samples=100)
+    X = load_features("data/X_lung_disease_data.csv")#, n_samples=100)
+    X_metr = load_features("data/X_lungdisease_metrics.csv")#, n_samples=100)
+    all_summaries = load_summaries("data/_lung_disease_summaries.txt")#, n_samples=100)
+    nom_summaries = load_summaries("data/lungdisease_nom_summaries.txt")#, n_samples=100)
 
     nominal_features = [
         'Gender',
         'Smoking Status',
         'Disease Type',
         'Treatment Type'
-    ]"""
-
+    ]
 
     # === CYBERSECURITY ===
 
+    """
     dataset = DatasetName.CYBERSECURITY.value
     y = load_labels("data/y_cybersecurity_intrusion_data.csv") #, n_samples=51)
     X = load_features("data/X_cybersecurity_intrusion_data.csv")
@@ -67,6 +66,7 @@ def run_txt_emb():
         'protocol_type',
         'unusual_time_access'
     ]
+    """
 
     methods = {
         # all summaries, all features
@@ -95,7 +95,7 @@ def run_txt_emb():
                           "conc": "conc3",
                           "pca": True,
                           "pca_str": "pca_"},
-                    # nom summaries, metr features
+        # nom summaries, metr features
         "conc3": {"X": X_metr,
                   "summaries": nom_summaries,
                   "conc": "conc3",
@@ -125,7 +125,7 @@ def run_txt_emb():
         #"sentence_t5_base": feature_extractor_sentence_t5_base,
 
         # Ember v1
-        #"ember_v1": feature_extractor_ember_v1,
+        "ember_v1": feature_extractor_ember_v1,
 
         # E5 Models
         #"E5-Small-V2": feature_extractor_e5_small_v2,
@@ -143,9 +143,9 @@ def run_txt_emb():
         #"GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
 
         # GTE Models
-        "GTE-Base": feature_extractor_gte_base,
-        #"GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
-        #"GTE-Large": feature_extractor_gte_large,
+        #"GTE-Base": feature_extractor_gte_base,
+        "GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
+        "GTE-Large": feature_extractor_gte_large,
         #"GTE-Small": feature_extractor_gte_small,
 
         # Potion Models
@@ -365,3 +365,4 @@ def run_txt_emb():
                                 pca_n_comp=hgbc_pca_components,
                                 metrics=hgbc_conc_test_scores,
                                 is_train=False)
+            
