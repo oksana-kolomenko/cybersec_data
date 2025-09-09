@@ -70,33 +70,6 @@ def run_txt_emb():
     methods = {
         # all summaries, all features
         """
-
-        # all summaries, metr features
-        "pca_conc2": {"X": X_metr,
-                      "summaries": all_summaries,
-                      "conc": "conc2",
-                      "pca": True,
-                      "pca_str": "pca_"},
-        # nom summaries, metr features
-        "pca_conc3": {"X": X_metr,
-                      "summaries": nom_summaries,
-                      "conc": "conc3",
-                      "pca": True,
-                      "pca_str": "pca_"},"""
-        
-        """
-        # all summaries, metr features
-        "conc2": {"X": X_metr,
-                  "summaries": all_summaries,
-                  "conc": "conc2",
-                  "pca": False,
-                  "pca_str": ""},
-        # nom summaries, metr features
-        "conc3": {"X": X_metr,
-                  "summaries": nom_summaries,
-                  "conc": "conc3",
-                  "pca": False,
-                  "pca_str": ""}"""
         # all summaries, all features
         "conc1": {"X": X,
                   "summaries": all_summaries,
@@ -108,6 +81,33 @@ def run_txt_emb():
                       "conc": "conc1",
                       "pca": True,
                       "pca_str": "pca_"},
+        """
+        # all summaries, metr features
+        "pca_conc2": {"X": X_metr,
+                      "summaries": all_summaries,
+                      "conc": "conc2",
+                      "pca": True,
+                      "pca_str": "pca_"},
+        # nom summaries, metr features
+        "pca_conc3": {"X": X_metr,
+                      "summaries": nom_summaries,
+                      "conc": "conc3",
+                      "pca": True,
+                      "pca_str": "pca_"},
+
+        # all summaries, metr features
+        "conc2": {"X": X_metr,
+                  "summaries": all_summaries,
+                  "conc": "conc2",
+                  "pca": False,
+                  "pca_str": ""},
+
+        # nom summaries, metr features
+        "conc3": {"X": X_metr,
+                  "summaries": nom_summaries,
+                  "conc": "conc3",
+                  "pca": False,
+                  "pca_str": ""}
     }
 
     text_feature = 'text'
@@ -141,12 +141,12 @@ def run_txt_emb():
         # GIST Models
         #"GIST-Small-Embedding-v0": feature_extractor_gist_small_embedding_v0,
         #"GIST-Embedding-v0": feature_extractor_gist_embedding_v0,
-        "GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
+        #"GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
 
         # GTE Models
         #"GTE-Base": feature_extractor_gte_base,
         "GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
-        "GTE-Large": feature_extractor_gte_large,
+        #"GTE-Large": feature_extractor_gte_large,
         #"GTE-Small": feature_extractor_gte_small,
 
         # Potion Models
