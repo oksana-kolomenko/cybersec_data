@@ -95,12 +95,13 @@ def run_txt_emb():
                           "conc": "conc3",
                           "pca": True,
                           "pca_str": "pca_"},
-                    # nom summaries, metr features
+        """                  
+        # nom summaries, metr features
         "conc3": {"X": X_metr,
                   "summaries": nom_summaries,
                   "conc": "conc3",
                   "pca": False,
-                  "pca_str": ""},"""
+                  "pca_str": ""},
         # all summaries, metr features
         "conc2": {"X": X_metr,
                   "summaries": all_summaries,
@@ -297,8 +298,6 @@ def run_txt_emb():
             pca_str = attributes.get("pca_str")
 
             # Logistic Regression conc (pca)
-
-            """
             (lr_conc_dataset, lr_conc_ml_method, lr_conc_emb_method,
              lr_conc_yesno, lr_best_params, lr_pca_components, lr_conc_train_score,
              lr_conc_test_scores) = concat_lr_txt_emb(
@@ -332,9 +331,10 @@ def run_txt_emb():
                                 best_params=lr_best_params,
                                 pca_n_comp=lr_pca_components,
                                 metrics=lr_conc_test_scores,
-                                is_train=False)"""
+                                is_train=False)
 
             # HGBC conc (pca)
+            """
             (concat_hgbc_dataset, concat_hgbc_ml_method, concat_hgbc_emb_method,
              hgbc_conc_yesno, hgbc_best_params, hgbc_pca_components, hgbc_conc_train_score,
              hgbc_conc_test_scores) = concat_hgbc_txt_emb(
@@ -364,4 +364,4 @@ def run_txt_emb():
                                 best_params=hgbc_best_params,
                                 pca_n_comp=hgbc_pca_components,
                                 metrics=hgbc_conc_test_scores,
-                                is_train=False)
+                                is_train=False)"""
