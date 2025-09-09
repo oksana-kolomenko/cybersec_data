@@ -963,9 +963,8 @@ def concat_hgbc_txt_emb(dataset_name, emb_method,
                                ]
     X_tabular[text_feature_column_name] = raw_text_summaries
     # separate non-text features
-    numerical_features = list(set(X_tabular.columns) -
-                              set(nominal_features) -
-                              set(text_features))
+    non_text_columns = list(set(X_tabular.columns) -
+                            set(text_features))
 
     pca_components = f"PCA ({n_components} components)" \
         if pca else "none"
@@ -990,7 +989,7 @@ def concat_hgbc_txt_emb(dataset_name, emb_method,
     search = GridSearchCV(
         estimator=Pipeline([
             ("transformer", ColumnTransformer([
-                ("numerical", "passthrough", numerical_features),
+                ("numerical", "passthrough", non_text_columns),
                 ("text", Pipeline(pipeline_text_steps), text_features)
             ])),
             ("classifier", HistGradientBoostingClassifier(categorical_features=nominal_feature_indices))
@@ -1005,7 +1004,7 @@ def concat_hgbc_txt_emb(dataset_name, emb_method,
         },
         scoring="neg_log_loss",
         cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats),
-        #n_jobs=-1
+        n_jobs=-1
     )
 
     # === Evaluation ===
