@@ -35,6 +35,7 @@ def run_txt_emb():
 
     # === LUNGDISEASE ===
 
+    """
     dataset = DatasetName.LUNG_DISEASE.value
     y = load_labels("data/y_lung_disease_data.csv", n_samples=100)
     X = load_features("data/X_lung_disease_data.csv", n_samples=100)
@@ -47,12 +48,11 @@ def run_txt_emb():
         'Smoking Status',
         'Disease Type',
         'Treatment Type'
-    ]
+    ]"""
 
 
     # === CYBERSECURITY ===
 
-    """
     dataset = DatasetName.CYBERSECURITY.value
     y = load_labels("data/y_cybersecurity_intrusion_data.csv") #, n_samples=51)
     X = load_features("data/X_cybersecurity_intrusion_data.csv")
@@ -65,16 +65,17 @@ def run_txt_emb():
         'browser_type',
         'protocol_type',
         'unusual_time_access'
-    ]"""
+    ]
 
     methods = {
-        # all summaries, all features
         # all summaries, all features
         "conc1": {"X": X,
                   "summaries": all_summaries,
                   "conc": "conc1",
                   "pca": False,
                   "pca_str": ""},
+
+        """
         "pca_conc1": {"X": X,
                       "summaries": all_summaries,
                       "conc": "conc1",
@@ -92,6 +93,15 @@ def run_txt_emb():
                       "conc": "conc3",
                       "pca": True,
                       "pca_str": "pca_"},
+        
+         # nom summaries, metr features
+        "conc3": {"X": X_metr,
+                  "summaries": nom_summaries,
+                  "conc": "conc3",
+                  "pca": False,
+                  "pca_str": ""}              
+                      
+        """
 
         # all summaries, metr features
         "conc2": {"X": X_metr,
@@ -100,19 +110,14 @@ def run_txt_emb():
                   "pca": False,
                   "pca_str": ""},
 
-        # nom summaries, metr features
-        "conc3": {"X": X_metr,
-                  "summaries": nom_summaries,
-                  "conc": "conc3",
-                  "pca": False,
-                  "pca_str": ""}
+
     }
 
     text_feature = 'text'
 
     feature_extractors = {
         # All MiniLM L6 v2
-        "all_miniLM_L6_v2": feature_extractor_all_minilm_l6_v2,
+        #"all_miniLM_L6_v2": feature_extractor_all_minilm_l6_v2,
 
         # Stella en 400m v5
         #"Stella-EN-400M-v5": feature_extractor_stella_en_400M_v5,
@@ -145,7 +150,7 @@ def run_txt_emb():
         #"GTE-Base": feature_extractor_gte_base,
         #"GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
         #"GTE-Large": feature_extractor_gte_large,
-        #"GTE-Small": feature_extractor_gte_small,
+        "GTE-Small": feature_extractor_gte_small,
 
         # Potion Models
         # "Potion-Base-2M": feature_extractor_potion_base_2M,

@@ -1,2 +1,0 @@
-Dataset,ML Method,Embedding Method,Concatenation,Best Parameters,PCA n_components,AUC,AP,Sensitivity,Specificity,Precision,F1,Balanced Accuracy
-lung_disease,HistGradientBoostingClassifier,all_miniLM_L6_v2,conc1,"{'classifier__min_samples_leaf': 15, 'transformer__text__embedding_aggregator__method': 'embedding_mean_without_cls_and_sep'}",none,0.5208333333333334,0.667938074352548,0.6666666666666666,0.125,0.5333333333333333,0.3732193732193732,0.3958333333333333
