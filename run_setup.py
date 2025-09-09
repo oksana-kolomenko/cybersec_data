@@ -94,12 +94,7 @@ def run_txt_emb():
                       "pca": True,
                       "pca_str": "pca_"},
         
-         # nom summaries, metr features
-        "conc3": {"X": X_metr,
-                  "summaries": nom_summaries,
-                  "conc": "conc3",
-                  "pca": False,
-                  "pca_str": ""}              
+            
                       
         """
 
@@ -109,7 +104,12 @@ def run_txt_emb():
                   "conc": "conc2",
                   "pca": False,
                   "pca_str": ""},
-
+        # nom summaries, metr features
+        "conc3": {"X": X_metr,
+                  "summaries": nom_summaries,
+                  "conc": "conc3",
+                  "pca": False,
+                  "pca_str": ""}
 
     }
 
@@ -147,10 +147,10 @@ def run_txt_emb():
         #"GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
 
         # GTE Models
-        #"GTE-Base": feature_extractor_gte_base,
+        "GTE-Base": feature_extractor_gte_base,
         #"GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
         #"GTE-Large": feature_extractor_gte_large,
-        "GTE-Small": feature_extractor_gte_small,
+        #"GTE-Small": feature_extractor_gte_small,
 
         # Potion Models
         # "Potion-Base-2M": feature_extractor_potion_base_2M,
