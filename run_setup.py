@@ -95,17 +95,17 @@ def run_txt_emb():
                           "conc": "conc3",
                           "pca": True,
                           "pca_str": "pca_"},
-        """                  
-        # nom summaries, metr features
-        "conc3": {"X": X_metr,
-                  "summaries": nom_summaries,
-                  "conc": "conc3",
-                  "pca": False,
-                  "pca_str": ""},
         # all summaries, metr features
         "conc2": {"X": X_metr,
                   "summaries": all_summaries,
                   "conc": "conc2",
+                  "pca": False,
+                  "pca_str": ""},                          
+        """
+        # nom summaries, metr features
+        "conc3": {"X": X_metr,
+                  "summaries": nom_summaries,
+                  "conc": "conc3",
                   "pca": False,
                   "pca_str": ""},
     }
@@ -130,24 +130,24 @@ def run_txt_emb():
 
         # E5 Models
         #"E5-Small-V2": feature_extractor_e5_small_v2,
-        "E5-Base-V2": feature_extractor_e5_base_v2,
+        #"E5-Base-V2": feature_extractor_e5_base_v2,
         #"E5-Large-V2": feature_extractor_e5_large_v2,
 
         # BGE Models (done)
         #"BGE-Small-EN-v1.5": feature_extractor_bge_small_en_v1_5,
-        "BGE-Base-EN-v1.5": feature_extractor_bge_base_en_v1_5,
+        #"BGE-Base-EN-v1.5": feature_extractor_bge_base_en_v1_5,
         #"BGE-Large-EN-v1.5": feature_extractor_bge_large_en_v1_5,
 
         # GIST Models
         #"GIST-Small-Embedding-v0": feature_extractor_gist_small_embedding_v0,
-        #"GIST-Embedding-v0": feature_extractor_gist_embedding_v0,
+        "GIST-Embedding-v0": feature_extractor_gist_embedding_v0,
         #"GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
 
         # GTE Models
         "GTE-Base": feature_extractor_gte_base,
         #"GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
         #"GTE-Large": feature_extractor_gte_large,
-        "GTE-Small": feature_extractor_gte_small,
+        #"GTE-Small": feature_extractor_gte_small,
 
         # Potion Models
         # "Potion-Base-2M": feature_extractor_potion_base_2M,
@@ -298,6 +298,7 @@ def run_txt_emb():
             pca_str = attributes.get("pca_str")
 
             # Logistic Regression conc (pca)
+            """
             (lr_conc_dataset, lr_conc_ml_method, lr_conc_emb_method,
              lr_conc_yesno, lr_best_params, lr_pca_components, lr_conc_train_score,
              lr_conc_test_scores) = concat_lr_txt_emb(
@@ -331,10 +332,10 @@ def run_txt_emb():
                                 best_params=lr_best_params,
                                 pca_n_comp=lr_pca_components,
                                 metrics=lr_conc_test_scores,
-                                is_train=False)
+                                is_train=False)"""
 
             # HGBC conc (pca)
-            """
+
             (concat_hgbc_dataset, concat_hgbc_ml_method, concat_hgbc_emb_method,
              hgbc_conc_yesno, hgbc_best_params, hgbc_pca_components, hgbc_conc_train_score,
              hgbc_conc_test_scores) = concat_hgbc_txt_emb(
@@ -364,4 +365,4 @@ def run_txt_emb():
                                 best_params=hgbc_best_params,
                                 pca_n_comp=hgbc_pca_components,
                                 metrics=hgbc_conc_test_scores,
-                                is_train=False)"""
+                                is_train=False)
