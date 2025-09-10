@@ -957,15 +957,15 @@ def concat_hgbc_txt_emb(dataset_name, emb_method,
 
     # add text as a new column
     text_features = [text_feature_column_name]
-    nominal_feature_indices = [X_tabular.columns.get_loc(col)
-                               for col in nominal_features
-                               if col in X_tabular.columns
-                               ]
+
     X_tabular[text_feature_column_name] = raw_text_summaries
     # separate non-text features
     non_text_columns = list(set(X_tabular.columns) -
                             set(text_features))
-
+    nominal_feature_indices = [
+        non_text_columns.index(col)
+        for col in nominal_features if col in non_text_columns
+    ]
     pca_components = f"PCA ({n_components} components)" \
         if pca else "none"
 
