@@ -4,9 +4,7 @@ from csv_saver import save_results_to_csv
 from data_preps import load_features, load_labels, load_summaries
 from helpers import concat_lr_rte, concat_hgbc_rte, concat_lr_txt_emb, concat_hgbc_txt_emb, hgbc_txt_emb, lr_txt_emb
 from models import (feature_extractor_gist_embedding_v0, feature_extractor_gte_small,
-                    feature_extractor_gist_large_embedding_v0, feature_extractor_gte_base_en_v1_5,
-                    feature_extractor_gte_large, feature_extractor_gte_base, feature_extractor_stella_en_400M_v5,
-                    feature_extractor_ember_v1)
+                    feature_extractor_gte_base_en_v1_5, feature_extractor_gte_base)
 #, feature_extractor_gte_base, feature_extractor_bge_base_en_v1_5, \
  #   feature_extractor_gte_base_en_v1_5, feature_extractor_gte_large)
 
