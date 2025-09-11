@@ -70,12 +70,7 @@ def run_txt_emb():
 
     methods = {
         # all summaries, all features
-        """
-            "pca_conc1": {"X": X,
-                          "summaries": all_summaries,
-                          "conc": "conc1",
-                          "pca": True,
-                          "pca_str": "pca_"},                                        
+        """                                       
         # all summaries, metr features
         "pca_conc2": {"X": X_metr,
                           "summaries": all_summaries,
@@ -101,6 +96,11 @@ def run_txt_emb():
                   "pca": False,
                   "pca_str": ""},
         """
+        "pca_conc1": {"X": X,
+                          "summaries": all_summaries,
+                          "conc": "conc1",
+                          "pca": True,
+                          "pca_str": "pca_"},
         "conc1": {"X": X,
                   "summaries": all_summaries,
                   "conc": "conc1",
@@ -124,7 +124,7 @@ def run_txt_emb():
         #"sentence_t5_base": feature_extractor_sentence_t5_base,
 
         # Ember v1
-        "ember_v1": feature_extractor_ember_v1,
+        #"ember_v1": feature_extractor_ember_v1,
 
         # E5 Models
         #"E5-Small-V2": feature_extractor_e5_small_v2,
@@ -142,9 +142,9 @@ def run_txt_emb():
         #"GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
 
         # GTE Models
-        "GTE-Base": feature_extractor_gte_base,
-        "GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
-        "GTE-Large": feature_extractor_gte_large,
+        #"GTE-Base": feature_extractor_gte_base,
+        #"GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
+        #"GTE-Large": feature_extractor_gte_large,
         "GTE-Small": feature_extractor_gte_small,
 
         # Potion Models
