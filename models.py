@@ -92,7 +92,7 @@ feature_extractor_e5_small_v2 = create_gen_feature_extractor("intfloat/e5-small-
 feature_extractor_e5_base_v2 = create_gen_feature_extractor("intfloat/e5-base-v2")
 
 # E5-LARGE-V2
-# feature_extractor_e5_large_v2 = create_gen_feature_extractor("intfloat/e5-large-v2")
+feature_extractor_e5_large_v2 = create_gen_feature_extractor("intfloat/e5-large-v2")
 
 # bge-small-en-v1.5
 feature_extractor_bge_small_en_v1_5 = create_gen_feature_extractor("BAAI/bge-small-en-v1.5")

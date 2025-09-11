@@ -11,7 +11,7 @@ from models import (feature_extractor_gist_embedding_v0, feature_extractor_gte_s
 #from helpers import concat_lr_rte, concat_hgbc_rte, lr_txt_emb, hgbc_txt_emb, concat_lr_txt_emb, concat_hgbc_txt_emb
 from models import (feature_extractor_bge_base_en_v1_5, feature_extractor_bge_small_en_v1_5, \
     feature_extractor_gist_small_embedding_v0, feature_extractor_e5_small_v2, \
-    feature_extractor_e5_base_v2, feature_extractor_all_minilm_l6_v2)
+    feature_extractor_e5_base_v2, feature_extractor_e5_large_v2, feature_extractor_all_minilm_l6_v2)
 
 from values import DatasetName
 
@@ -86,24 +86,25 @@ def run_txt_emb():
                   "conc": "conc1",
                   "pca": False,
                   "pca_str": ""},
-                  "pca_conc1": {"X": X,
-                          "summaries": all_summaries,
-                          "conc": "conc1",
-                          "pca": True,
-                          "pca_str": "pca_"},
-        
-        # nom summaries, metr features
-        "pca_conc3": {"X": X_metr,
-                          "summaries": nom_summaries,
-                          "conc": "conc3",
-                          "pca": True,
-                          "pca_str": "pca_"},"""
-        # all summaries, metr features
+                # all summaries, metr features
         "pca_conc2": {"X": X_metr,
                       "summaries": all_summaries,
                       "conc": "conc2",
                       "pca": True,
+                      "pca_str": "pca_"},                 
+                          """
+        "pca_conc1": {"X": X,
+                      "summaries": all_summaries,
+                      "conc": "conc1",
+                      "pca": True,
                       "pca_str": "pca_"},
+
+        # nom summaries, metr features
+        "pca_conc3": {"X": X_metr,
+                      "summaries": nom_summaries,
+                      "conc": "conc3",
+                      "pca": True,
+                      "pca_str": "pca_"}
     }
 
     text_feature = 'text'
@@ -126,22 +127,22 @@ def run_txt_emb():
 
         # E5 Models
         #"E5-Small-V2": feature_extractor_e5_small_v2,
-        #"E5-Base-V2": feature_extractor_e5_base_v2,
-        #"E5-Large-V2": feature_extractor_e5_large_v2,
+        "E5-Base-V2": feature_extractor_e5_base_v2,
+        "E5-Large-V2": feature_extractor_e5_large_v2,
 
         # BGE Models (done)
         #"BGE-Small-EN-v1.5": feature_extractor_bge_small_en_v1_5,
-        "BGE-Base-EN-v1.5": feature_extractor_bge_base_en_v1_5,
+        #"BGE-Base-EN-v1.5": feature_extractor_bge_base_en_v1_5,
         #"BGE-Large-EN-v1.5": feature_extractor_bge_large_en_v1_5,
 
         # GIST Models
         #"GIST-Small-Embedding-v0": feature_extractor_gist_small_embedding_v0,
-        "GIST-Embedding-v0": feature_extractor_gist_embedding_v0,
+        #"GIST-Embedding-v0": feature_extractor_gist_embedding_v0,
         #"GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
 
         # GTE Models
-        "GTE-Base": feature_extractor_gte_base,
-        "GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
+        #"GTE-Base": feature_extractor_gte_base,
+        #"GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
         #"GTE-Large": feature_extractor_gte_large,
         #"GTE-Small": feature_extractor_gte_small,
 
