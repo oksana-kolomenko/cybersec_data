@@ -75,12 +75,7 @@ def run_txt_emb():
                           "conc": "conc2",
                           "pca": True,
                           "pca_str": "pca_"},
-        # nom summaries, metr features
-        "pca_conc3": {"X": X_metr,
-                          "summaries": nom_summaries,
-                          "conc": "conc3",
-                          "pca": True,
-                          "pca_str": "pca_"},  
+        
         # nom summaries, metr features
         "conc3": {"X": X_metr,
                   "summaries": nom_summaries,
@@ -98,10 +93,16 @@ def run_txt_emb():
                   "conc": "conc1",
                   "pca": False,
                   "pca_str": ""},
-        """
-        "pca_conc1": {"X": X,
+                  "pca_conc1": {"X": X,
                           "summaries": all_summaries,
                           "conc": "conc1",
+                          "pca": True,
+                          "pca_str": "pca_"},
+        """
+        # nom summaries, metr features
+        "pca_conc3": {"X": X_metr,
+                          "summaries": nom_summaries,
+                          "conc": "conc3",
                           "pca": True,
                           "pca_str": "pca_"},
     }
