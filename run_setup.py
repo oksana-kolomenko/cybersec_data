@@ -68,14 +68,7 @@ def run_txt_emb():
 
     methods = {
         # all summaries, all features
-        """                                     
-        # all summaries, metr features
-        "pca_conc2": {"X": X_metr,
-                          "summaries": all_summaries,
-                          "conc": "conc2",
-                          "pca": True,
-                          "pca_str": "pca_"},
-        
+        """                                             
         # nom summaries, metr features
         "conc3": {"X": X_metr,
                   "summaries": nom_summaries,
@@ -98,13 +91,19 @@ def run_txt_emb():
                           "conc": "conc1",
                           "pca": True,
                           "pca_str": "pca_"},
-        """
+        
         # nom summaries, metr features
         "pca_conc3": {"X": X_metr,
                           "summaries": nom_summaries,
                           "conc": "conc3",
                           "pca": True,
-                          "pca_str": "pca_"},
+                          "pca_str": "pca_"},"""
+        # all summaries, metr features
+        "pca_conc2": {"X": X_metr,
+                      "summaries": all_summaries,
+                      "conc": "conc2",
+                      "pca": True,
+                      "pca_str": "pca_"},
     }
 
     text_feature = 'text'
