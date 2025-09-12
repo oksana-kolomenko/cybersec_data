@@ -265,7 +265,7 @@ def run_txt_emb():
                            text_summaries=all_summaries,
                            y=y, pca=True)
 
-        save_results_to_csv(output_file=f"{dataset}_{model_name}_HGBC_pca_train.csv",
+        save_results_to_csv(output_file=f"train/hgbc_pca/{dataset}_{model_name}_HGBC_pca_train.csv",
                             dataset_name=hgbc_txt_dataset,
                             ml_method=hgbc_txt_ml_method,
                             emb_method=hgbc_txt_emb_method,
@@ -275,7 +275,7 @@ def run_txt_emb():
                             metrics=hgbc_txt_train_score,
                             is_train=True)
 
-        save_results_to_csv(output_file=f"{dataset}_{model_name}_HGBC_pca_test.csv",
+        save_results_to_csv(output_file=f"test/hgbc_pca/{dataset}_{model_name}_HGBC_pca_test.csv",
                             dataset_name=hgbc_txt_dataset,
                             ml_method=hgbc_txt_ml_method,
                             emb_method=hgbc_txt_emb_method,
