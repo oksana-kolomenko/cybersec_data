@@ -4,7 +4,9 @@ from csv_saver import save_results_to_csv
 from data_preps import load_features, load_labels, load_summaries
 from helpers import concat_lr_rte, concat_hgbc_rte, concat_lr_txt_emb, concat_hgbc_txt_emb, hgbc_txt_emb, lr_txt_emb
 from models import (feature_extractor_gist_embedding_v0, feature_extractor_gte_small,
-                    feature_extractor_gte_base_en_v1_5, feature_extractor_gte_base)
+                    feature_extractor_gte_base_en_v1_5, feature_extractor_gte_base, feature_extractor_stella_en_400M_v5,
+                    feature_extractor_ember_v1, feature_extractor_bge_large_en_v1_5, feature_extractor_gte_large,
+                    feature_extractor_gist_large_embedding_v0)
 #, feature_extractor_gte_base, feature_extractor_bge_base_en_v1_5, \
  #   feature_extractor_gte_base_en_v1_5, feature_extractor_gte_large)
 
@@ -111,10 +113,10 @@ def run_txt_emb():
 
     feature_extractors = {
         # All MiniLM L6 v2
-        #"all_miniLM_L6_v2": feature_extractor_all_minilm_l6_v2,
+        "all_miniLM_L6_v2": feature_extractor_all_minilm_l6_v2,
 
         # Stella en 400m v5
-        #"Stella-EN-400M-v5": feature_extractor_stella_en_400M_v5,
+        "Stella-EN-400M-v5": feature_extractor_stella_en_400M_v5,
 
         # GTR T5 Base
         #"GTR_T5_Base": feature_extractor_gtr_t5_base,
@@ -123,28 +125,28 @@ def run_txt_emb():
         #"sentence_t5_base": feature_extractor_sentence_t5_base,
 
         # Ember v1
-        #"ember_v1": feature_extractor_ember_v1,
+        "ember_v1": feature_extractor_ember_v1,
 
         # E5 Models
-        #"E5-Small-V2": feature_extractor_e5_small_v2,
+        "E5-Small-V2": feature_extractor_e5_small_v2,
         "E5-Base-V2": feature_extractor_e5_base_v2,
         "E5-Large-V2": feature_extractor_e5_large_v2,
 
         # BGE Models (done)
-        #"BGE-Small-EN-v1.5": feature_extractor_bge_small_en_v1_5,
-        #"BGE-Base-EN-v1.5": feature_extractor_bge_base_en_v1_5,
-        #"BGE-Large-EN-v1.5": feature_extractor_bge_large_en_v1_5,
+        "BGE-Small-EN-v1.5": feature_extractor_bge_small_en_v1_5,
+        "BGE-Base-EN-v1.5": feature_extractor_bge_base_en_v1_5,
+        "BGE-Large-EN-v1.5": feature_extractor_bge_large_en_v1_5,
 
         # GIST Models
-        #"GIST-Small-Embedding-v0": feature_extractor_gist_small_embedding_v0,
-        #"GIST-Embedding-v0": feature_extractor_gist_embedding_v0,
-        #"GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
+        "GIST-Small-Embedding-v0": feature_extractor_gist_small_embedding_v0,
+        "GIST-Embedding-v0": feature_extractor_gist_embedding_v0,
+        "GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
 
         # GTE Models
-        #"GTE-Base": feature_extractor_gte_base,
-        #"GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
-        #"GTE-Large": feature_extractor_gte_large,
-        #"GTE-Small": feature_extractor_gte_small,
+        "GTE-Base": feature_extractor_gte_base,
+        "GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
+        "GTE-Large": feature_extractor_gte_large,
+        "GTE-Small": feature_extractor_gte_small,
 
         # Potion Models
         # "Potion-Base-2M": feature_extractor_potion_base_2M,
@@ -252,7 +254,7 @@ def run_txt_emb():
         save_results_to_csv(output_file=f"{dataset}_{model_name}_LR_pca_test.csv", dataset_name=lr_txt_dataset,
                             ml_method=lr_txt_ml_method, emb_method=lr_txt_emb_method, concatenation=lr_txt_concatenation,
                             best_params=lr_txt_best_params, pca_n_comp=lr_txt_pca_components,
-                            metrics=lr_txt_test_scores, is_train=False)
+                            metrics=lr_txt_test_scores, is_train=False)"""
 
         # HGBC
         (hgbc_txt_dataset, hgbc_txt_ml_method, hgbc_txt_emb_method, hgbc_txt_conc, hgbc_best_params, hgbc_pca_comp,
@@ -260,7 +262,7 @@ def run_txt_emb():
             = hgbc_txt_emb(dataset_name=dataset,
                            emb_method=model_name,
                            feature_extractor=feature_extractor,
-                           summaries=all_summaries,
+                           text_summaries=all_summaries,
                            y=y, pca=True)
 
         save_results_to_csv(output_file=f"{dataset}_{model_name}_HGBC_pca_train.csv",
@@ -281,7 +283,7 @@ def run_txt_emb():
                             best_params=hgbc_best_params,
                             pca_n_comp=hgbc_pca_comp,
                             metrics=hgbc_txt_test_scores,
-                            is_train=False)"""
+                            is_train=False)
 
         for method_name, attributes in methods.items():
             #################
@@ -333,6 +335,7 @@ def run_txt_emb():
 
             # HGBC conc (pca)
 
+            """
             (concat_hgbc_dataset, concat_hgbc_ml_method, concat_hgbc_emb_method,
              hgbc_conc_yesno, hgbc_best_params, hgbc_pca_components, hgbc_conc_train_score,
              hgbc_conc_test_scores) = concat_hgbc_txt_emb(
@@ -362,4 +365,4 @@ def run_txt_emb():
                                 best_params=hgbc_best_params,
                                 pca_n_comp=hgbc_pca_components,
                                 metrics=hgbc_conc_test_scores,
-                                is_train=False)
+                                is_train=False)"""
