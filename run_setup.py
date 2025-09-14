@@ -185,7 +185,6 @@ def run_txt_emb():
     }
 
     for model_name, feature_extractor in feature_extractors.items():
-
         #######################
         ### no PCA, no CONC ###
         #######################
