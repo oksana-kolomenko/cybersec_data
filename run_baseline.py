@@ -4,7 +4,7 @@ from helpers import (hgbc_rte, hgbc, logistic_regression, lr_rte, concat_hgbc_rt
 from values import DatasetName
 
 
-def run_models_on_table_data():
+def run_baseline():
     # === LUNGDISEASE ===
     """
     dataset = DatasetName.LUNG_DISEASE.value
