@@ -257,28 +257,8 @@ def lr_rte(dataset_name, X, y, nominal_features, pca):
     return dataset, ml_method, emb_method, concatenation, best_params, train_metrics, metrics_per_fold
 
 
-# n_components aus dem Datensatz nehmen (40 für Posttrauma (shape[1])
-def lr_txt_emb(dataset_name, emb_method, feature_extractor, raw_text_summaries, y, max_iter, pca):
-    y = pd.Series(y)
-
-    print(f"[INFO] Rows before NaN removal: X={len(raw_text_summaries)}, y={len(y)}")
-    print(f"[INFO] NaNs in y before removal: {y.isna().sum()}")
-
-    raw_text_summaries = pd.Series(raw_text_summaries)
-
-    valid_indices = ~y.isna()
-    raw_text_summaries = raw_text_summaries.loc[valid_indices]
-    y = y.loc[valid_indices]
-
-    print(f"[INFO] Rows after NaN removal: X={len(raw_text_summaries)}, y={len(y)}")
-    print(f"[INFO] NaNs in y after removal: {y.isna().sum()}")
-
-    if not np.issubdtype(y.dtype, np.number):
-        print(f"Label encoding: {y.unique()}")
-        le = LabelEncoder()
-        y = le.fit_transform(y)  # this returns a NumPy array
-    else:
-        y = y.to_numpy()
+def lr_txt_emb(dataset_name, emb_method, feature_extractor, max_iter, pca, y=None, y_train=None, y_test=None,
+               text_summaries=None, train_summaries=None, test_summaries=None):
 
     config = DATASET_CONFIGS[dataset_name]
     n_splits = config.splits
@@ -289,7 +269,8 @@ def lr_txt_emb(dataset_name, emb_method, feature_extractor, raw_text_summaries, 
     concatenation = "no"
     metrics_per_fold = []
 
-    skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
+    X_train = ""
+    X_test = ""
 
     is_sentence_transformer = any(
         key in emb_method.lower()
@@ -308,7 +289,6 @@ def lr_txt_emb(dataset_name, emb_method, feature_extractor, raw_text_summaries, 
     if pca:
         pipeline_steps.append(("numerical_scaler", StandardScaler()))
         pipeline_steps.append(("pca", PCA(n_components=n_components)))
-        # pipeline_steps.append(("numerical_scaler", MinMaxScaler()))
     else:
         pipeline_steps.append(("numerical_scaler", MinMaxScaler()))
 
@@ -327,72 +307,36 @@ def lr_txt_emb(dataset_name, emb_method, feature_extractor, raw_text_summaries, 
         scoring="neg_log_loss",
         cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats, random_state=42)
     )
-
     # === Evaluation ===
-    if dataset_name == DatasetName.POSTTRAUMA.value:
-        for train_index, test_index in skf.split(raw_text_summaries, y):
-            print(f"train, text index: {train_index}, {test_index}")
-            X_train, X_test = [raw_text_summaries[i] for i in train_index], [raw_text_summaries[i] for i in test_index]
-            y_train, y_test = y[train_index], y[test_index]
+    if dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
+        X_train, X_test, y_train, y_test = train_test_split(text_summaries, y, test_size=0.2, random_state=42)
 
-            n_samples = len(X_train)
-            n_features = X_train[0].shape[0] if hasattr(X_train[0], 'shape') else len(X_train[0])
+    elif (dataset_name == DatasetName.MIMIC_0.value or dataset_name == DatasetName.MIMIC_1.value
+          or dataset_name == DatasetName.MIMIC_2.value or dataset_name == DatasetName.MIMIC_3.value):
+        X_train, X_test = train_summaries, test_summaries
 
-            # Zeige die Dimensionen an
-            print(f"Number of samples (train) (n_samples): {n_samples}")  #
-            print(f"Number of samples (test) (n_samples): {len(X_test)}")  #
-            print(f"Number of features (n_features): {n_features}")
-            print(f"Minimum of samples and features: {min(n_samples, n_features)}")
+    # Fit and evaluate
+    search.fit(X_train, y_train)
 
-            # Fit and evaluate
-            search.fit(X_train, y_train)
+    y_test_pred = search.predict(X_test)
+    y_test_pred_proba = search.predict_proba(X_test)[:, 1]
 
-            y_test_pred = search.predict(X_test)
-            y_test_pred_proba = search.predict_proba(X_test)[:, 1]
+    print(f"Best hyperparameters: {search.best_params_}")
 
-            best_param = f"Best params for this fold: {search.best_params_}"
-            print(best_param)
+    metrics_per_fold.append(
+        calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
 
-            metrics_per_fold.append(
-                calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
+    # train metrics
+    y_train_pred = search.predict(X_train)
+    y_train_pred_proba = search.predict_proba(X_train)[:, 1]
+    train_metrics = calc_metrics(y=y_train, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
 
-    elif dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
-        X_train, X_test, y_train, y_test = train_test_split(raw_text_summaries, y, test_size=0.2, random_state=42)
-
-        print(f"Train size: {len(X_train)}, Test size: {len(X_test)}")
-
-        # Fit and evaluate
-        search.fit(X_train, y_train)
-
-        y_test_pred = search.predict(X_test)
-        y_test_pred_proba = search.predict_proba(X_test)[:, 1]
-
-        best_param = f"Best params for this fold: {search.best_params_}"
-        print(best_param)
-
-        metrics_per_fold.append(
-            calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
-
-    search.fit(
-        raw_text_summaries,
-        y
-    )
-
-    # change to X_train instead of all data for cybersec & lungdisease
-    y_train_pred = search.predict(raw_text_summaries)
-    y_train_pred_proba = search.predict_proba(raw_text_summaries)[:, 1]
-
-    # Training metrics
-    train_metrics = calc_metrics(y=y, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
+    print(f"embedding size: {len(search.best_estimator_.named_steps['classifier'].coef_[0])}")
 
     best_params = f"{search.best_params_}"
 
-    print(f"embedding size: {len(search.best_estimator_.named_steps['classifier'].coef_[0])}")
-    print(f"Best hyperparameters: {search.best_params_}")
-    print(f"Train metrics: {train_metrics}")
-    print(f"Test metrics per fold: {metrics_per_fold}")
-
-    return dataset_name, ml_method, emb_method, concatenation, best_params, pca_components, train_metrics, metrics_per_fold
+    return (dataset_name, ml_method, emb_method, concatenation, best_params, pca_components, train_metrics,
+            metrics_per_fold)
 
 
 def hgbc(dataset_name, X, y, nominal_features, pca):
@@ -568,6 +512,7 @@ def hgbc_rte(dataset_name, X, y, nominal_features):
     print(f"lr_ran_tree_emb_train_score: {hgbc_rt_emb_train_score}")
 
     return dataset_name, ml_method, emb_method, conc, best_params, train_metrics, metrics_per_fold
+
 
 def hgbc_txt_emb(dataset_name, emb_method,
                  feature_extractor, pca,

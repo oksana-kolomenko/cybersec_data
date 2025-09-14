@@ -190,24 +190,25 @@ def run_txt_emb():
         ### no PCA, no CONC ###
         #######################
 
-        """# Logistic Regression
+        # Logistic Regression
         (lr_txt_dataset, lr_txt_ml_method, lr_txt_emb_method, lr_txt_concatenation, lr_txt_best_params,
          lr_txt_pca_components, lr_txt_train_score, lr_txt_test_scores) = lr_txt_emb(
             dataset_name=dataset, emb_method=model_name,
             feature_extractor=feature_extractor, max_iter=10000,
-            raw_text_summaries=all_summaries, y=y, pca=False)
+            text_summaries=all_summaries, y=y, pca=False)
 
-        save_results_to_csv(output_file=f"{dataset}_{model_name}_LR_train.csv", dataset_name=lr_txt_dataset,
+        save_results_to_csv(output_file=f"train/lr/{dataset}_{model_name}_LR_train.csv", dataset_name=lr_txt_dataset,
                             ml_method=lr_txt_ml_method, emb_method=lr_txt_emb_method, concatenation=lr_txt_concatenation,
                             best_params=lr_txt_best_params, pca_n_comp=lr_txt_pca_components,
                             metrics=lr_txt_train_score, is_train=True)
 
-        save_results_to_csv(output_file=f"{dataset}_{model_name}_LR_test.csv", dataset_name=lr_txt_dataset,
+        save_results_to_csv(output_file=f"test/lr/{dataset}_{model_name}_LR_test.csv", dataset_name=lr_txt_dataset,
                             ml_method=lr_txt_ml_method, emb_method=lr_txt_emb_method, concatenation=lr_txt_concatenation,
                             best_params=lr_txt_best_params, pca_n_comp=lr_txt_pca_components,
-                            metrics=lr_txt_test_scores, is_train=False)"""
+                            metrics=lr_txt_test_scores, is_train=False)
 
         # HGBC
+        """
         (hgbc_txt_dataset, hgbc_txt_ml_method, hgbc_txt_emb_method, hgbc_txt_conc, hgbc_best_params, hgbc_pca_comp,
          hgbc_txt_train_score, hgbc_txt_test_scores) \
             = hgbc_txt_emb(dataset_name=dataset,
@@ -235,30 +236,31 @@ def run_txt_emb():
                             pca_n_comp=hgbc_pca_comp,
                             metrics=hgbc_txt_test_scores,
                             is_train=False)
+        """
 
         ####################
         ### PCA, no CONC ###
         ####################
 
         # Logistic Regression
-        """(lr_txt_dataset, lr_txt_ml_method, lr_txt_emb_method, lr_txt_concatenation, lr_txt_best_params,
+        (lr_txt_dataset, lr_txt_ml_method, lr_txt_emb_method, lr_txt_concatenation, lr_txt_best_params,
          lr_txt_pca_components, lr_txt_train_score, lr_txt_test_scores) = lr_txt_emb(
             dataset_name=dataset, emb_method=model_name,
             feature_extractor=feature_extractor, max_iter=10000,
-            raw_text_summaries=all_summaries, y=y, pca=True)
+            text_summaries=all_summaries, y=y, pca=True)
 
-        save_results_to_csv(output_file=f"{dataset}_{model_name}_LR_pca_train.csv", dataset_name=lr_txt_dataset,
+        save_results_to_csv(output_file=f"train/lr_pca/{dataset}_{model_name}_LR_pca_train.csv", dataset_name=lr_txt_dataset,
                             ml_method=lr_txt_ml_method, emb_method=lr_txt_emb_method, concatenation=lr_txt_concatenation,
                             best_params=lr_txt_best_params, pca_n_comp=lr_txt_pca_components,
                             metrics=lr_txt_train_score, is_train=True)
 
-        save_results_to_csv(output_file=f"{dataset}_{model_name}_LR_pca_test.csv", dataset_name=lr_txt_dataset,
+        save_results_to_csv(output_file=f"test/lr_pca/{dataset}_{model_name}_LR_pca_test.csv", dataset_name=lr_txt_dataset,
                             ml_method=lr_txt_ml_method, emb_method=lr_txt_emb_method, concatenation=lr_txt_concatenation,
                             best_params=lr_txt_best_params, pca_n_comp=lr_txt_pca_components,
                             metrics=lr_txt_test_scores, is_train=False)
 
         # HGBC
-        (hgbc_txt_dataset, hgbc_txt_ml_method, hgbc_txt_emb_method, hgbc_txt_conc, hgbc_best_params, hgbc_pca_comp,
+        """(hgbc_txt_dataset, hgbc_txt_ml_method, hgbc_txt_emb_method, hgbc_txt_conc, hgbc_best_params, hgbc_pca_comp,
          hgbc_txt_train_score, hgbc_txt_test_scores) \
             = hgbc_txt_emb(dataset_name=dataset,
                            emb_method=model_name,
