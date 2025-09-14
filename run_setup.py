@@ -71,15 +71,8 @@ def run_txt_emb():
 
     methods = {
         # all summaries, all features
-        """                                             
-        # nom summaries, metr features
-        "conc3": {"X": X_metr,
-                  "summaries": nom_summaries,
-                  "conc": "conc3",
-                  "pca": False,
-                  "pca_str": ""},        
-        # all summaries, metr features
-                             
+        """                                               
+        # all summaries, metr features                             
         "conc1": {"X": X,
                   "summaries": all_summaries,
                   "conc": "conc1",
@@ -104,10 +97,16 @@ def run_txt_emb():
                       "conc": "conc3",
                       "pca": True,
                       "pca_str": "pca_"}
-        """
+        
         "conc2": {"X": X_metr,
                   "summaries": all_summaries,
                   "conc": "conc2",
+                  "pca": False,
+                  "pca_str": ""},"""
+        # nom summaries, metr features
+        "conc3": {"X": X_metr,
+                  "summaries": nom_summaries,
+                  "conc": "conc3",
                   "pca": False,
                   "pca_str": ""},
     }
@@ -133,7 +132,7 @@ def run_txt_emb():
 
         # BGE Models (done)
         #"BGE-Small-EN-v1.5": feature_extractor_bge_small_en_v1_5,
-        #"BGE-Base-EN-v1.5": feature_extractor_bge_base_en_v1_5,
+        "BGE-Base-EN-v1.5": feature_extractor_bge_base_en_v1_5,
 
         # GIST Models
         #"GIST-Small-Embedding-v0": feature_extractor_gist_small_embedding_v0,
