@@ -147,7 +147,7 @@ def run_baseline():
         output_file=f"test/baseline/{dataset}_HGBC_rte_test.csv")"""
 
     # 5. LR conc RTE
-    (hgbc_rt_dataset, hgbc_rt_ml_method, hgbc_rt_emb_method, hgbc_rte_conc, hgbc_rte_best_params,
+    (hgbc_rt_dataset, hgbc_rt_ml_method, hgbc_rt_emb_method, hgbc_rte_conc, hgbc_rte_best_params, pca,
      hgbc_rt_emb_train_score, hgbc_rt_emb_test_scores) = \
         concat_lr_rte(dataset_name=dataset, X_tabular=X, y=y,
                       nominal_features=nominal_features, pca=None, imp_max_iter=30, class_max_iter=10000)
@@ -156,7 +156,7 @@ def run_baseline():
         dataset_name=hgbc_rt_dataset,
         ml_method=hgbc_rt_ml_method,
         emb_method=hgbc_rt_emb_method,
-        pca_n_comp="none",
+        pca_n_comp=pca,
         best_params=hgbc_rte_best_params,
         concatenation=hgbc_rte_conc,
         is_train=True,
@@ -176,7 +176,7 @@ def run_baseline():
 
 
     # 6. HGBC conc RTE
-    (hgbc_rt_dataset, hgbc_rt_ml_method, hgbc_rt_emb_method, hgbc_rte_conc, hgbc_rte_best_params,
+    (hgbc_rt_dataset, hgbc_rt_ml_method, hgbc_rt_emb_method, hgbc_rte_conc, hgbc_rte_best_params, pca,
      hgbc_rt_emb_train_score, hgbc_rt_emb_test_scores) = \
         concat_hgbc_rte(dataset_name=dataset, X_tabular=X, y=y,
                         nominal_features=nominal_features, pca=None, imp_max_iter=30)
