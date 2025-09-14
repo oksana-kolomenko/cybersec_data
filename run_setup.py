@@ -318,7 +318,7 @@ def run_txt_emb():
                 imp_max_iter=30, class_max_iter=10000, pca=pca)
                 #imp_max_iter=10, class_max_iter=10, pca=True)
 
-            save_results_to_csv(output_file=f"{dataset}_{model_name}_LR_{conc_art}_{pca_str}train.csv",
+            save_results_to_csv(output_file=f"train/{dataset}_{model_name}_LR_{conc_art}_{pca_str}train.csv",
                                 dataset_name=lr_conc_dataset,
                                 ml_method=lr_conc_ml_method,
                                 emb_method=lr_conc_emb_method,
@@ -328,7 +328,7 @@ def run_txt_emb():
                                 metrics=lr_conc_train_score,
                                 is_train=True)
 
-            save_results_to_csv(output_file=f"{dataset}_{model_name}_LR_{conc_art}_{pca_str}test.csv",
+            save_results_to_csv(output_file=f"test/{dataset}_{model_name}_LR_{conc_art}_{pca_str}test.csv",
                                 dataset_name=lr_conc_dataset,
                                 ml_method=lr_conc_ml_method,
                                 emb_method=lr_conc_emb_method,
