@@ -20,21 +20,6 @@ from values import DatasetName
 
 
 def run_txt_emb():
-    # === POSTTRAUMA ===
-    """dataset = DatasetName.POSTTRAUMA.value
-    X = load_features("X_posttrauma.csv")
-    y = load_labels("y_posttrauma.csv")
-    summaries = load_summaries("posttrauma_summaries.txt")
-
-    nominal_features = [
-        'gender_birth',
-        'ethnic_group',
-        'education_age',
-        'working_at_baseline',
-        'penetrating_injury'
-    ]"""
-
-
     # === LUNGDISEASE ===
 
     """

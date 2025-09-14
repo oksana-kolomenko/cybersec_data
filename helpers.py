@@ -50,25 +50,6 @@ def train(search, X_train, y_train, X_test, y_test):
 
 
 def logistic_regression(dataset_name, X, y, nominal_features, pca):
-    y = pd.Series(y)
-
-    print(f"[INFO] Rows before NaN removal: X={len(X)}, y={len(y)}")
-    print(f"[INFO] NaNs in y before removal: {y.isna().sum()}")
-
-    valid_indices = ~y.isna()
-    X = X.loc[valid_indices]
-    y = y.loc[valid_indices]
-
-    print(f"[INFO] Rows after NaN removal: X={len(X)}, y={len(y)}")
-    print(f"[INFO] NaNs in y after removal: {y.isna().sum()}")
-
-    if not np.issubdtype(y.dtype, np.number):
-        print(f"Label encoding: {y.unique()}")
-        le = LabelEncoder()
-        y = le.fit_transform(y)  # this returns a NumPy array
-    else:
-        y = y.to_numpy()
-
     config = DATASET_CONFIGS[dataset_name]
     n_splits, n_repeats, n_components = config.splits, config.n_repeats, config.pca if pca else None
 
@@ -76,9 +57,7 @@ def logistic_regression(dataset_name, X, y, nominal_features, pca):
         "logistic regression", "none", "no", f"PCA ({n_components} components)" if pca else "none"
 
     metrics_per_fold = []
-    skf = StratifiedKFold(n_splits=n_splits,
-                          shuffle=True,
-                          random_state=42)
+    train_metrics = ""
 
     pca_step = ("pca", PCA(n_components=n_components)) if n_components else None
     numerical_features = list(set(X.columns.values) - set(nominal_features))
@@ -91,7 +70,7 @@ def logistic_regression(dataset_name, X, y, nominal_features, pca):
                     ("nominal_encoder", OneHotEncoder(handle_unknown="ignore", drop="if_binary"))
                 ]), nominal_features),
                 ("numerical", Pipeline([
-                    ("numerical_imputer", IterativeImputer(max_iter=50)),
+                    ("numerical_imputer", IterativeImputer(max_iter=30)),
                     ("numerical_scaler", MinMaxScaler())
                 ] + ([pca_step] if pca_step else [])), numerical_features),
             ])),
@@ -103,21 +82,7 @@ def logistic_regression(dataset_name, X, y, nominal_features, pca):
         cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats)
     )
 
-    if dataset_name == DatasetName.POSTTRAUMA.value:
-        for train_index, test_index in skf.split(X, y):
-            X_train, X_test = X.iloc[train_index], X.iloc[test_index]
-            y_train, y_test = y[train_index], y[test_index]
-
-            print(f"Log reg test fitting... ")
-            search.fit(X_train, y_train)
-
-            y_test_pred = search.predict(X_test)
-            y_test_pred_proba = search.predict_proba(X_test)[:, 1]
-
-            metrics_per_fold.append(
-                calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
-
-    elif dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
+    if dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         search.fit(X_train, y_train)
 
@@ -127,16 +92,13 @@ def logistic_regression(dataset_name, X, y, nominal_features, pca):
         metrics_per_fold.append(
             calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
 
+        y_train_pred = search.predict(X_train)
+        y_train_pred_proba = search.predict_proba(X_train)[:, 1]
+
+        # Training metrics
+        train_metrics = calc_metrics(y=y_train, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
     else:
         print(f"Unknown dataset {dataset_name}")
-
-    print(f"Log reg train fitting... ")
-    search.fit(X, y)
-    y_train_pred = search.predict(X)
-    y_train_pred_proba = search.predict_proba(X)[:, 1]
-
-    # Training metrics
-    train_metrics = calc_metrics(y=y, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
 
     best_params = f"{search.best_params_}"
 
@@ -145,29 +107,11 @@ def logistic_regression(dataset_name, X, y, nominal_features, pca):
     print(f"Train metrics: {train_metrics}")
     print(f"Test metrics per fold: {metrics_per_fold}")
 
-    return dataset_name, ml_method, emb_method, concatenation, best_params, pca_components, train_metrics, metrics_per_fold
+    return (dataset_name, ml_method, emb_method, concatenation, best_params, pca_components, train_metrics,
+            metrics_per_fold)
 
 
 def lr_rte(dataset_name, X, y, nominal_features, pca):
-    y = pd.Series(y)
-
-    print(f"[INFO] Rows before NaN removal: X={len(X)}, y={len(y)}")
-    print(f"[INFO] NaNs in y before removal: {y.isna().sum()}")
-
-    valid_indices = ~y.isna()
-    X = X.loc[valid_indices]
-    y = y.loc[valid_indices]
-
-    print(f"[INFO] Rows after NaN removal: X={len(X)}, y={len(y)}")
-    print(f"[INFO] NaNs in y after removal: {y.isna().sum()}")
-
-    if not np.issubdtype(y.dtype, np.number):
-        print(f"Label encoding: {y.unique()}")
-        le = LabelEncoder()
-        y = le.fit_transform(y)  # this returns a NumPy array
-    else:
-        y = y.to_numpy()
-
     dataset = dataset_name
     config = DATASET_CONFIGS[dataset]
     n_splits = config.splits
@@ -179,7 +123,7 @@ def lr_rte(dataset_name, X, y, nominal_features, pca):
     concatenation = "no"
     #pca_components = f"PCA ({n_components} components)" if n_components else "none"
     metrics_per_fold = []
-    skf = StratifiedKFold(n_splits=n_splits)
+    train_metrics = ""
 
     search = GridSearchCV(
         estimator=Pipeline([
@@ -192,7 +136,7 @@ def lr_rte(dataset_name, X, y, nominal_features, pca):
                 ]), nominal_features),
                 # Encode ordinal&numerical features with RTE
                 ("numerical", Pipeline([
-                    ("numerical_imputer", IterativeImputer(max_iter=50)),
+                    ("numerical_imputer", IterativeImputer(max_iter=30)),
                     # ("debug_numerical", DebugTransformer(name="Numerical Debug"))
                     # ("embedding", RandomTreesEmbedding(random_state=42))
                 ]), list(set(X.columns.values) - set(nominal_features))),
@@ -210,23 +154,7 @@ def lr_rte(dataset_name, X, y, nominal_features, pca):
         scoring="neg_log_loss",
         cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats, random_state=42)
     )
-    if dataset_name == DatasetName.POSTTRAUMA.value:
-        for train_index, test_index in skf.split(X, y):
-            X_train, X_test = X.iloc[train_index], X.iloc[test_index]
-            y_train, y_test = y[train_index], y[test_index]
-
-            print(f"Log Reg rte test fitting... ")
-
-            # Fit the model for each fold
-            search.fit(X_train, y_train)
-
-            y_test_pred = search.predict(X_test)
-            y_test_pred_proba = search.predict_proba(X_test)[:, 1]
-
-            metrics_per_fold.append(
-                calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
-
-    elif dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
+    if dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         search.fit(X_train, y_train)
 
@@ -236,17 +164,13 @@ def lr_rte(dataset_name, X, y, nominal_features, pca):
         metrics_per_fold.append(
             calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
 
+        y_train_pred = search.predict(X_train)
+        y_train_pred_proba = search.predict_proba(X_train)[:, 1]
+
+        # Training metrics
+        train_metrics = calc_metrics(y=y_train, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
     else:
         print(f"Unknown dataset {dataset_name}")
-
-    # Train the final model on the full dataset
-    print(f"Log reg rte train fitting... ")
-    search.fit(X, y)
-    y_train_pred = search.predict(X)
-    y_train_pred_proba = search.predict_proba(X)[:, 1]
-
-    # Training metrics
-    train_metrics = calc_metrics(y=y, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
 
     best_params = f"{search.best_params_}"
     print(f"Embedding size: {len(search.best_estimator_.named_steps['classifier'].coef_[0])}")
@@ -340,25 +264,6 @@ def lr_txt_emb(dataset_name, emb_method, feature_extractor, max_iter, pca, y=Non
 
 
 def hgbc(dataset_name, X, y, nominal_features, pca):
-    y = pd.Series(y)
-
-    print(f"[INFO] Rows before NaN removal: X={len(X)}, y={len(y)}")
-    print(f"[INFO] NaNs in y before removal: {y.isna().sum()}")
-
-    valid_indices = ~y.isna()
-    X = X.loc[valid_indices]
-    y = y.loc[valid_indices]
-
-    print(f"[INFO] Rows after NaN removal: X={len(X)}, y={len(y)}")
-    print(f"[INFO] NaNs in y after removal: {y.isna().sum()}")
-
-    if not np.issubdtype(y.dtype, np.number):
-        print(f"Label encoding: {y.unique()}")
-        le = LabelEncoder()
-        y = le.fit_transform(y)  # this returns a NumPy array
-    else:
-        y = y.to_numpy()
-
     config = DATASET_CONFIGS[dataset_name]
     n_splits, n_repeats, n_components = config.splits, config.n_repeats, config.pca if pca else None
 
@@ -366,11 +271,7 @@ def hgbc(dataset_name, X, y, nominal_features, pca):
         "HGBC", "none", "no", f"PCA ({n_components} components)" if pca else "none"
 
     metrics_per_fold = []
-    skf = StratifiedKFold(n_splits=n_splits,
-                          shuffle=True,
-                          random_state=42)
-
-    pca_step = ("pca", PCA(n_components=n_components)) if n_components else None
+    train_metrics = ""
 
     search = GridSearchCV(
         estimator=Pipeline([
@@ -381,30 +282,24 @@ def hgbc(dataset_name, X, y, nominal_features, pca):
         cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats, random_state=42)
     )
 
-    if dataset_name == DatasetName.POSTTRAUMA.value:
-        for train_index, test_index in skf.split(X, y):
-            X_train, X_test = X.iloc[train_index], X.iloc[test_index]
-            y_train, y_test = y[train_index], y[test_index]
-
-            metrics = train(search=search, X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test)
-
-            metrics_per_fold.append(metrics)
-
-    elif dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
+    if dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        search.fit(X_train, y_train)
 
-        metrics = train(search=search, X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test)
-        metrics_per_fold.append(metrics)
+        y_test_pred = search.predict(X_test)
+        y_test_pred_proba = search.predict_proba(X_test)[:, 1]
 
+        metrics_per_fold.append(
+            calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
+
+        y_train_pred = search.predict(X_train)
+        y_train_pred_proba = search.predict_proba(X_train)[:, 1]
+
+        # Training metrics
+        train_metrics = calc_metrics(y=y_train, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
     else:
         print(f"Unknown dataset {dataset_name}")
 
-    print(f"HGBC train fitting... ")
-    search.fit(X, y)
-    y_train_pred = search.predict(X)
-    y_train_pred_proba = search.predict_proba(X)[:, 1]
-
-    train_metrics = calc_metrics(y=y, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
     best_params = f"{search.best_params_}"
 
     print(f"Best hyperparameters: {best_params}")
@@ -415,38 +310,16 @@ def hgbc(dataset_name, X, y, nominal_features, pca):
 
 
 def hgbc_rte(dataset_name, X, y, nominal_features):
-    y = pd.Series(y)
-
-    print(f"[INFO] Rows before NaN removal: X={len(X)}, y={len(y)}")
-    print(f"[INFO] NaNs in y before removal: {y.isna().sum()}")
-
-    valid_indices = ~y.isna()
-    X = X.loc[valid_indices]
-    y = y.loc[valid_indices]
-
-    print(f"[INFO] Rows after NaN removal: X={len(X)}, y={len(y)}")
-    print(f"[INFO] NaNs in y after removal: {y.isna().sum()}")
-
-    if not np.issubdtype(y.dtype, np.number):
-        print(f"Label encoding: {y.unique()}")
-        le = LabelEncoder()
-        y = le.fit_transform(y)  # this returns a NumPy array
-    else:
-        y = y.to_numpy()
-
     dataset = dataset_name
     config = DATASET_CONFIGS[dataset]
     n_splits = config.splits
-    n_components = config.pca
     n_repeats = config.n_repeats
 
     ml_method = "HGBC"
     emb_method = "RTE"
     conc = "no"
     metrics_per_fold = []
-    skf = StratifiedKFold(n_splits=n_splits,
-                          shuffle=True,
-                          random_state=42)
+    train_metrics = ""
 
     search = GridSearchCV(
         estimator=Pipeline([
@@ -471,22 +344,7 @@ def hgbc_rte(dataset_name, X, y, nominal_features):
         cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats)
     )
 
-    if dataset_name == DatasetName.POSTTRAUMA.value:
-        for train_index, test_index in skf.split(X, y):
-            X_train, X_test = X.iloc[train_index], X.iloc[test_index]
-            y_train, y_test = y[train_index], y[test_index]
-
-            print(f"X_train size before: {X_train.shape}")
-            print(f"y_train size: {len(y_train)}")
-            search.fit(X_train, y_train)
-
-            y_test_pred = search.predict(X_test)
-            y_test_pred_proba = search.predict_proba(X_test)[:, 1]
-
-            metrics_per_fold.append(
-                calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
-
-    elif dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
+    if dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         search.fit(X_train, y_train)
 
@@ -496,14 +354,13 @@ def hgbc_rte(dataset_name, X, y, nominal_features):
         metrics_per_fold.append(
             calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
 
+        y_train_pred = search.predict(X_train)
+        y_train_pred_proba = search.predict_proba(X_train)[:, 1]
+
+        # Training metrics
+        train_metrics = calc_metrics(y=y_train, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
     else:
         print(f"Unknown dataset {dataset_name}")
-
-    search.fit(X, y)
-    y_train_pred = search.predict(X)
-    y_train_pred_proba = search.predict_proba(X)[:, 1]
-
-    train_metrics = calc_metrics(y=y, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
 
     best_params = f"{search.best_params_}"
 
@@ -520,14 +377,6 @@ def hgbc_txt_emb(dataset_name, emb_method,
                  text_summaries=None,
                  y_train=None, y_test=None,
                  train_summaries=None, test_summaries=None):
-    # Target encoding
-    y = pd.Series(y)
-    if not np.issubdtype(y.dtype, np.number):
-        print(f"Label encoding: {y.unique()}")
-        le = LabelEncoder()
-        y = le.fit_transform(y)  # this returns a NumPy array
-    else:
-        y = y.to_numpy()
 
     config = DATASET_CONFIGS[dataset_name]
     n_splits = config.splits
@@ -537,7 +386,6 @@ def hgbc_txt_emb(dataset_name, emb_method,
     ml_method = "HistGradientBoosting"
     emb_method = emb_method
     concatenation = "no"
-    train_metrics = ""
     metrics_per_fold = []
 
     X_train = ""
@@ -734,12 +582,10 @@ def concat_lr_rte(dataset_name, X_tabular,
     n_repeats = config.n_repeats
 
     ml_method = "Logistic Regression"
-    emb_method = "Random Trees Embedding"
+    emb_method = "RTE"
     concatenation = "yes"
     metrics_per_fold = []
-    skf = StratifiedKFold(n_splits=n_splits,
-                          shuffle=True,
-                          random_state=42)
+
     pca_transformer = PCA(n_components=n_components, svd_solver='auto') if pca else "passthrough"
     numerical_features = list(set(X_tabular.columns) - set(nominal_features))
 
@@ -804,23 +650,27 @@ def concat_lr_rte(dataset_name, X_tabular,
         cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats)
     )
 
-    for train_index, test_index in skf.split(X_tabular, y):
-        X_tab_train, X_tab_test = X_tabular.iloc[train_index], X_tabular.iloc[test_index]
-        y_train, y_test = y[train_index], y[test_index]
+    if dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
+        X_train, X_test, y_train, y_test = train_test_split(X_tabular, y, test_size=0.2, random_state=42)
 
-        search.fit(X_tab_train, y_train)
+        print(f"Train size: {len(X_train)}, Test size: {len(X_test)}")
 
-        y_test_pred = search.predict(X_tab_test)
-        y_test_pred_proba = search.predict_proba(X_tab_test)[:, 1]
+        # Fit and evaluate
+        search.fit(X_train, y_train)
+
+        y_test_pred = search.predict(X_test)
+        y_test_pred_proba = search.predict_proba(X_test)[:, 1]
+
+        best_param = f"Best params for this fold: {search.best_params_}"
+        print(best_param)
 
         metrics_per_fold.append(
             calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
 
-    search.fit(X_tabular, y)
-    y_train_pred = search.predict(X_tabular)
-    y_train_pred_proba = search.predict_proba(X_tabular)[:, 1]
+        y_train_pred = search.predict(X_train)
+        y_train_pred_proba = search.predict_proba(X_train)[:, 1]
 
-    train_metrics = calc_metrics(y=y, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
+        train_metrics = calc_metrics(y=y_train, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
 
     best_params = f"{search.best_params_}"
 
@@ -841,13 +691,6 @@ def concat_hgbc_txt_emb(dataset_name, emb_method,
     n_splits = config.splits
     n_components = config.pca if pca else None
     n_repeats = config.n_repeats
-    y = pd.Series(y)
-    if not np.issubdtype(y.dtype, np.number):
-        print(f"Label encoding: {y.unique()}")
-        le = LabelEncoder()
-        y = le.fit_transform(y)  # this returns a NumPy array
-    else:
-        y = y.to_numpy()
 
     train_metrics = ""
     ml_method = "HistGradientBoostingClassifier"
@@ -947,10 +790,11 @@ def concat_hgbc_rte(dataset_name, X_tabular, y, nominal_features, imp_max_iter, 
     n_repeats = config.n_repeats
 
     ml_method = "HistGradientBoosting"
-    emb_method = "Random Trees Embedding"
+    emb_method = "RTE"
     concatenation = "yes"
     metrics_per_fold = []
-    skf = StratifiedKFold(n_splits=n_splits)
+    train_metrics = ""
+
     categorical_indices = [X_tabular.columns.get_loc(col) for col in nominal_features]
     numerical_features = list(set(X_tabular.columns) - set(nominal_features))
     pca_transformer = PCA(n_components=n_components, svd_solver='auto') if pca else "passthrough"
@@ -991,8 +835,8 @@ def concat_hgbc_rte(dataset_name, X_tabular, y, nominal_features, imp_max_iter, 
 
     param_grid = {
         "hist_gb__min_samples_leaf": [5, 10, 15, 20],
-        "feature_combiner__embeddings__embedding__n_estimators": [10, 100],  # decreased for small data
-        "feature_combiner__embeddings__embedding__max_depth": [2, 5]  # decreased for small data
+        "feature_combiner__embeddings__embedding__n_estimators": [10, 100],
+        "feature_combiner__embeddings__embedding__max_depth": [2, 5]
     }
     search = GridSearchCV(
         estimator=pipeline,
@@ -1001,22 +845,27 @@ def concat_hgbc_rte(dataset_name, X_tabular, y, nominal_features, imp_max_iter, 
         cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats)
     )
 
-    for train_index, test_index in skf.split(X_tabular, y):
-        X_train, X_test = X_tabular.iloc[train_index], X_tabular.iloc[test_index]
-        y_train, y_test = y[train_index], y[test_index]
+    if dataset_name == DatasetName.CYBERSECURITY.value or dataset_name == DatasetName.LUNG_DISEASE.value:
+        X_train, X_test, y_train, y_test = train_test_split(X_tabular, y, test_size=0.2, random_state=42)
 
+        print(f"Train size: {len(X_train)}, Test size: {len(X_test)}")
+
+        # Fit and evaluate
         search.fit(X_train, y_train)
+
         y_test_pred = search.predict(X_test)
         y_test_pred_proba = search.predict_proba(X_test)[:, 1]
+
+        best_param = f"Best params for this fold: {search.best_params_}"
+        print(best_param)
 
         metrics_per_fold.append(
             calc_metrics(y=y_test, y_pred=y_test_pred, y_pred_proba=y_test_pred_proba))
 
-    search.fit(X_tabular, y)
-    y_train_pred = search.predict(X_tabular)
-    y_train_pred_proba = search.predict_proba(X_tabular)[:, 1]
+        y_train_pred = search.predict(X_train)
+        y_train_pred_proba = search.predict_proba(X_train)[:, 1]
 
-    train_metrics = calc_metrics(y=y, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
+        train_metrics = calc_metrics(y=y_train, y_pred=y_train_pred, y_pred_proba=y_train_pred_proba)
 
     best_params = f"{search.best_params_}"
 
