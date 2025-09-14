@@ -113,25 +113,25 @@ def run_txt_emb():
         #"BGE-Small-EN-v1.5": feature_extractor_bge_small_en_v1_5,
         #"GIST-Small-Embedding-v0": feature_extractor_gist_small_embedding_v0,
         #"GTE-Small": feature_extractor_gte_small,
-        "E5-Base-V2": feature_extractor_e5_base_v2,
+        #"E5-Base-V2": feature_extractor_e5_base_v2,
 
         # Ember v1
-        "ember_v1": feature_extractor_ember_v1,
+        #"ember_v1": feature_extractor_ember_v1,
         # BGE Models (done)
-        "BGE-Base-EN-v1.5": feature_extractor_bge_base_en_v1_5,
+        #"BGE-Base-EN-v1.5": feature_extractor_bge_base_en_v1_5,
 
         # GIST Models
-        "GIST-Embedding-v0": feature_extractor_gist_embedding_v0,
+        #"GIST-Embedding-v0": feature_extractor_gist_embedding_v0,
 
         # GTE Models
-        "GTE-Base": feature_extractor_gte_base,
-        "GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
+        #"GTE-Base": feature_extractor_gte_base,
+        #"GTE-Base-EN-v1.5": feature_extractor_gte_base_en_v1_5,
 
         # large
-        #"E5-Large-V2": feature_extractor_e5_large_v2,
-        #"BGE-Large-EN-v1.5": feature_extractor_bge_large_en_v1_5,
-        #"GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
-        #"GTE-Large": feature_extractor_gte_large,
+        "E5-Large-V2": feature_extractor_e5_large_v2,
+        "BGE-Large-EN-v1.5": feature_extractor_bge_large_en_v1_5,
+        "GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
+        "GTE-Large": feature_extractor_gte_large,
 
         # Stella en 400m v5
         #"Stella-EN-400M-v5": feature_extractor_stella_en_400M_v5,
