@@ -125,7 +125,7 @@ feature_extractor_gte_base_en_v1_5 = create_gte_feature_extractor("Alibaba-NLP/g
 feature_extractor_gte_large = create_gen_feature_extractor("thenlper/gte-large")
 
 # stella_en_400M_v5 (SotA)
-#feature_extractor_stella_en_400M_v5 = create_gen_feature_extractor("dunzhang/stella_en_400M_v5")
+feature_extractor_stella_en_400M_v5 = create_gen_feature_extractor("dunzhang/stella_en_400M_v5")
 
 # GTR T5 Base
 # feature_extractor_gtr_t5_base = create_gen_feature_extractor('sentence-transformers/gtr-t5-base')
