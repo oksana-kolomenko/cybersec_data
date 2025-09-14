@@ -15,12 +15,21 @@ def load_features(file_path, delimiter=',', n_samples=None):
     print(f"features: {data}")
     return data
 
-def load_labels(file_path, delimiter=',', n_samples=None):
+
+def load_labels(file_path, delimiter=','):
+    # Load the labels
     data = pd.read_csv(file_path, delimiter=delimiter)
-    labels = data.values.ravel()
-    if n_samples:
-        labels = labels[:n_samples]  # Take only the first n_samples elements
-    return labels
+    y = data.values.ravel()  # Flatten in case it's a single column DataFrame
+
+    y = pd.Series(y)
+    if not np.issubdtype(y.dtype, np.number):
+        print(f"Label encoding: {y.unique()}")
+        le = LabelEncoder()
+        y = le.fit_transform(y)  # this returns a NumPy array
+    else:
+        y = y.to_numpy()
+    return y
+
 
 def load_summaries(file_name, n_samples=None):
     if not os.path.exists(file_name):
