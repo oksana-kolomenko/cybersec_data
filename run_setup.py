@@ -79,12 +79,12 @@ def run_txt_emb():
                   "pca": False,
                   "pca_str": ""},        
         # all summaries, metr features
-        "conc2": {"X": X_metr,
+                             
+        "conc1": {"X": X,
                   "summaries": all_summaries,
-                  "conc": "conc2",
+                  "conc": "conc1",
                   "pca": False,
-                  "pca_str": ""},                                
-
+                  "pca_str": ""},
                 # all summaries, metr features
         "pca_conc2": {"X": X_metr,
                       "summaries": all_summaries,
@@ -105,9 +105,9 @@ def run_txt_emb():
                       "pca": True,
                       "pca_str": "pca_"}
         """
-        "conc1": {"X": X,
+        "conc2": {"X": X_metr,
                   "summaries": all_summaries,
-                  "conc": "conc1",
+                  "conc": "conc2",
                   "pca": False,
                   "pca_str": ""},
     }
@@ -128,15 +128,15 @@ def run_txt_emb():
         "ember_v1": feature_extractor_ember_v1,
 
         # E5 Models
-        "E5-Small-V2": feature_extractor_e5_small_v2,
+        #"E5-Small-V2": feature_extractor_e5_small_v2,
         "E5-Base-V2": feature_extractor_e5_base_v2,
 
         # BGE Models (done)
-        "BGE-Small-EN-v1.5": feature_extractor_bge_small_en_v1_5,
+        #"BGE-Small-EN-v1.5": feature_extractor_bge_small_en_v1_5,
         #"BGE-Base-EN-v1.5": feature_extractor_bge_base_en_v1_5,
 
         # GIST Models
-        "GIST-Small-Embedding-v0": feature_extractor_gist_small_embedding_v0,
+        #"GIST-Small-Embedding-v0": feature_extractor_gist_small_embedding_v0,
         #"GIST-Embedding-v0": feature_extractor_gist_embedding_v0,
 
         # GTE Models
@@ -147,7 +147,7 @@ def run_txt_emb():
         # large
         "E5-Large-V2": feature_extractor_e5_large_v2,
         "BGE-Large-EN-v1.5": feature_extractor_bge_large_en_v1_5,
-        "GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
+        #"GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
         "GTE-Large": feature_extractor_gte_large,
 
         # Stella en 400m v5
