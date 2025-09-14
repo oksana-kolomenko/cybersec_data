@@ -13,7 +13,7 @@ from models import (feature_extractor_gist_embedding_v0, feature_extractor_gte_s
 #from helpers import concat_lr_rte, concat_hgbc_rte, lr_txt_emb, hgbc_txt_emb, concat_lr_txt_emb, concat_hgbc_txt_emb
 from models import (feature_extractor_bge_base_en_v1_5, feature_extractor_bge_small_en_v1_5, \
     feature_extractor_gist_small_embedding_v0, feature_extractor_e5_small_v2, \
-    feature_extractor_stella_en_400M_v5,
+    #feature_extractor_stella_en_400M_v5,
     feature_extractor_e5_base_v2, feature_extractor_e5_large_v2, feature_extractor_all_minilm_l6_v2)
 
 from values import DatasetName
