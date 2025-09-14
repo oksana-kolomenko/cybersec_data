@@ -130,11 +130,11 @@ def run_txt_emb():
         # large
         #"E5-Large-V2": feature_extractor_e5_large_v2,
         #"BGE-Large-EN-v1.5": feature_extractor_bge_large_en_v1_5,
-        #"GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
-        #"GTE-Large": feature_extractor_gte_large,
+        "GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
+        "GTE-Large": feature_extractor_gte_large,
 
         # Stella en 400m v5
-        "Stella-EN-400M-v5": feature_extractor_stella_en_400M_v5,
+        #"Stella-EN-400M-v5": feature_extractor_stella_en_400M_v5,
 
         # Potion Models
         # "Potion-Base-2M": feature_extractor_potion_base_2M,
