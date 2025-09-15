@@ -121,15 +121,15 @@ def run_baseline():
 
     # 4. random trees embedding + hgbc
     (hgbc_rt_dataset, hgbc_rt_ml_method, hgbc_rt_emb_method, hgbc_rte_conc, hgbc_rte_best_params,
-     hgbc_rt_emb_train_score, hgbc_rt_emb_test_scores) = \
+     hgbc_rt_n_components, hgbc_rt_emb_train_score, hgbc_rt_emb_test_scores) = \
         hgbc_rte(dataset_name=dataset, X=X, y=y,
-                 nominal_features=nominal_features)
+                 nominal_features=nominal_features, pca=None)
 
     save_results_to_csv(
         dataset_name=hgbc_rt_dataset,
         ml_method=hgbc_rt_ml_method,
         emb_method=hgbc_rt_emb_method,
-        pca_n_comp="none",
+        pca_n_comp=hgbc_rt_n_components,
         best_params=hgbc_rte_best_params,
         concatenation=hgbc_rte_conc,
         is_train=True,
@@ -140,7 +140,7 @@ def run_baseline():
         dataset_name=hgbc_rt_dataset,
         ml_method=hgbc_rt_ml_method,
         emb_method=hgbc_rt_emb_method,
-        pca_n_comp="none",
+        pca_n_comp=hgbc_rt_n_components,
         best_params=hgbc_rte_best_params,
         concatenation=hgbc_rte_conc,
         is_train=False,
