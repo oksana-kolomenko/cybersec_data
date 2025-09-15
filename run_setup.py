@@ -64,18 +64,12 @@ def run_txt_emb():
                   "conc": "conc2",
                   "pca": False,
                   "pca_str": ""},
-        # all summaries, metr features                             
-        "conc1": {"X": X,
-                  "summaries": all_summaries,
-                  "conc": "conc1",
-                  "pca": False,
-                  "pca_str": ""},
                         # nom summaries, metr features
         "conc3": {"X": X_metr,
                   "summaries": nom_summaries,
                   "conc": "conc3",
                   "pca": False,
-                  "pca_str": ""},"""
+                  "pca_str": ""},
         "pca_conc2": {"X": X_metr,
                       "summaries": all_summaries,
                       "conc": "conc2",
@@ -93,7 +87,13 @@ def run_txt_emb():
                       "summaries": nom_summaries,
                       "conc": "conc3",
                       "pca": True,
-                      "pca_str": "pca_"}
+                      "pca_str": "pca_"}"""
+        # all summaries, metr features                             
+        "conc1": {"X": X,
+                  "summaries": all_summaries,
+                  "conc": "conc1",
+                  "pca": False,
+                  "pca_str": ""},
     }
 
     text_feature = 'text'
@@ -112,7 +112,7 @@ def run_txt_emb():
         #"E5-Small-V2": feature_extractor_e5_small_v2,
         #"BGE-Small-EN-v1.5": feature_extractor_bge_small_en_v1_5,
         #"GIST-Small-Embedding-v0": feature_extractor_gist_small_embedding_v0,
-        #"GTE-Small": feature_extractor_gte_small,
+        "GTE-Small": feature_extractor_gte_small,
         #"E5-Base-V2": feature_extractor_e5_base_v2,
 
         # Ember v1
@@ -130,8 +130,8 @@ def run_txt_emb():
         # large
         #"E5-Large-V2": feature_extractor_e5_large_v2,
         #"BGE-Large-EN-v1.5": feature_extractor_bge_large_en_v1_5,
-        "GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
-        "GTE-Large": feature_extractor_gte_large,
+        #"GIST-Large-Embedding-v0": feature_extractor_gist_large_embedding_v0,
+        #"GTE-Large": feature_extractor_gte_large,
 
         # Stella en 400m v5
         #"Stella-EN-400M-v5": feature_extractor_stella_en_400M_v5,
@@ -284,7 +284,7 @@ def run_txt_emb():
             summaries = attributes.get("summaries")
             pca = attributes.get("pca")
             pca_str = attributes.get("pca_str")
-
+            """
             # Logistic Regression conc (pca)
             (lr_conc_dataset, lr_conc_ml_method, lr_conc_emb_method,
              lr_conc_yesno, lr_best_params, lr_pca_components, lr_conc_train_score,
@@ -352,4 +352,4 @@ def run_txt_emb():
                                 best_params=hgbc_best_params,
                                 pca_n_comp=hgbc_pca_components,
                                 metrics=hgbc_conc_test_scores,
-                                is_train=False)"""
+                                is_train=False)
