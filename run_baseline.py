@@ -6,7 +6,6 @@ from values import DatasetName
 
 def run_baseline():
     # === LUNGDISEASE ===
-    """
     dataset = DatasetName.LUNG_DISEASE.value
     y = load_labels("data/y_lung_disease_data.csv")#, n_samples=100)
     X = load_features("data/X_lung_disease_data.csv")#, n_samples=100)
@@ -17,9 +16,10 @@ def run_baseline():
         'Smoking Status',
         'Disease Type',
         'Treatment Type'
-    ]"""
+    ]
 
     # === CYBERSECURITY ===
+    """
     dataset = DatasetName.CYBERSECURITY.value
     y = load_labels("data/y_cybersecurity_intrusion_data.csv")  # , n_samples=51)
     X = load_features("data/X_cybersecurity_intrusion_data.csv")  # ), n_samples=51)
@@ -31,6 +31,7 @@ def run_baseline():
         'protocol_type',
         'unusual_time_access'
     ]
+    """
 
     # 1. logistic regression
     (log_reg_dataset, log_reg_ml_method, log_reg_emb_method, log_reg_conc, log_reg_best_params,
@@ -148,7 +149,7 @@ def run_baseline():
         output_file=f"test/baseline/{dataset}_HGBC_rte_test.csv")
 
     # 5. LR conc RTE
-    """(hgbc_rt_dataset, hgbc_rt_ml_method, hgbc_rt_emb_method, hgbc_rte_conc, hgbc_rte_best_params, pca,
+    (hgbc_rt_dataset, hgbc_rt_ml_method, hgbc_rt_emb_method, hgbc_rte_conc, hgbc_rte_best_params, pca,
      hgbc_rt_emb_train_score, hgbc_rt_emb_test_scores) = \
         concat_lr_rte(dataset_name=dataset, X_tabular=X, y=y,
                       nominal_features=nominal_features, pca=None, imp_max_iter=30, class_max_iter=10000)
@@ -202,4 +203,4 @@ def run_baseline():
         concatenation=hgbc_rte_conc,
         is_train=False,
         metrics=hgbc_rt_emb_test_scores,
-        output_file=f"test/baseline/{dataset}_HGBC_rte_conc_test.csv")"""
+        output_file=f"test/baseline/{dataset}_HGBC_rte_conc_test.csv")
