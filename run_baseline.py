@@ -93,14 +93,15 @@ def run_baseline():
         output_file=f"test/baseline/{dataset}_lr_rte_test.csv")
 
     # 3. hgbc (no embedding)
-    hgbc_dataset, hgbc_ml_method, hgbc_emb_method, conc, hgbc_best_params, hgbc_train_score, hgbc_test_scores = \
+    (hgbc_dataset, hgbc_ml_method, hgbc_emb_method, conc, hgbc_best_params, hgbc_n_components,
+     hgbc_train_score, hgbc_test_scores) = \
         hgbc(dataset_name=dataset, X=X, y=y, nominal_features=nominal_features, pca=None)
 
     save_results_to_csv(
         dataset_name=hgbc_dataset,
         ml_method=hgbc_ml_method,
         emb_method=hgbc_emb_method,
-        pca_n_comp="none",
+        pca_n_comp=hgbc_n_components,
         best_params=hgbc_best_params,
         concatenation=conc,
         is_train=True,
@@ -111,7 +112,7 @@ def run_baseline():
         dataset_name=hgbc_dataset,
         ml_method=hgbc_ml_method,
         emb_method=hgbc_emb_method,
-        pca_n_comp="none",
+        pca_n_comp=hgbc_n_components,
         best_params=hgbc_best_params,
         concatenation=conc,
         is_train=False,

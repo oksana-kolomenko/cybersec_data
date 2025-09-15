@@ -115,13 +115,13 @@ def lr_rte(dataset_name, X, y, nominal_features, pca):
     dataset = dataset_name
     config = DATASET_CONFIGS[dataset]
     n_splits = config.splits
-    #n_components = config.pca if pca else None
+    n_components = config.pca if pca else None
     n_repeats = config.n_repeats
 
     ml_method = "logistic regression"
     emb_method = "RTE"
     concatenation = "no"
-    #pca_components = f"PCA ({n_components} components)" if n_components else "none"
+    pca_components = f"PCA ({n_components} components)" if n_components else "none"
     metrics_per_fold = []
     train_metrics = ""
 
@@ -178,7 +178,7 @@ def lr_rte(dataset_name, X, y, nominal_features, pca):
     print(f"Train metrics: {train_metrics}")
     print(f"Test metrics per fold: {metrics_per_fold}")
 
-    return dataset, ml_method, emb_method, concatenation, best_params, train_metrics, metrics_per_fold
+    return dataset, ml_method, emb_method, concatenation, best_params, n_components, train_metrics, metrics_per_fold
 
 
 def lr_txt_emb(dataset_name, emb_method, feature_extractor, max_iter, pca, y=None, y_train=None, y_test=None,
@@ -309,11 +309,14 @@ def hgbc(dataset_name, X, y, nominal_features, pca):
     return dataset_name, ml_method, emb_method, concatenation, best_params, pca_components, train_metrics, metrics_per_fold
 
 
-def hgbc_rte(dataset_name, X, y, nominal_features):
+def hgbc_rte(dataset_name, X, y, nominal_features, pca):
     dataset = dataset_name
     config = DATASET_CONFIGS[dataset]
     n_splits = config.splits
     n_repeats = config.n_repeats
+
+    n_components = config.pca if pca else None
+    pca_components = f"PCA ({n_components} components)" if n_components else "none"
 
     ml_method = "HGBC"
     emb_method = "RTE"
@@ -368,7 +371,7 @@ def hgbc_rte(dataset_name, X, y, nominal_features):
     print(f"best hyperparameters: {best_params}")
     print(f"lr_ran_tree_emb_train_score: {hgbc_rt_emb_train_score}")
 
-    return dataset_name, ml_method, emb_method, conc, best_params, train_metrics, metrics_per_fold
+    return dataset_name, ml_method, emb_method, conc, best_params, n_components, train_metrics, metrics_per_fold
 
 
 def hgbc_txt_emb(dataset_name, emb_method,
